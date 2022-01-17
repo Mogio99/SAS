@@ -1,4 +1,4 @@
-package user;
+package businesslogic.user;
 
 import javafx.collections.FXCollections;
 import persistence.PersistenceManager;
