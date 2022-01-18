@@ -1,5 +1,4 @@
 package businesslogic.task;
 
-public class KTaskEventReceiver {
-
+public interface KTaskEventReceiver {
 }
