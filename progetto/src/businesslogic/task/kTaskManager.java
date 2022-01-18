@@ -1,4 +1,5 @@
 package businesslogic.task;
+import businesslogic.job.Job;
 import businesslogic.service.Service;
 import businesslogic.user.User;
 import businesslogic.UseCaseLogicException;
@@ -9,6 +10,16 @@ public class kTaskManager {
     private ArrayList<KTaskEventReceiver> eventReceivers;
     private SummarySheet currentSS;
 
+    private void notifySSCreated(SummarySheet ss) {
+        for(KTaskEventReceiver kitchenTaskER: this.eventReceivers){
+            kitchenTaskER.updateSSCreated(ss);
+        }
+    }
+    private void notifyTaskAdded(Task t) {
+        for(KTaskEventReceiver kitchenTaskER: this.eventReceivers){
+            kitchenTaskER.updateTaskAdded(t);
+        }
+    }
     public SummarySheet createSS(Service s) throws UseCaseLogicException{
         User user = userMngr.getCurrentUser();
         if(user.isChef()==false){
@@ -23,18 +34,26 @@ public class kTaskManager {
         SummarySheet ss = new SummarySheet(s,user,menu);
         this.setCurrent(ss);
         this.notifySSCreated(ss);
-        return ss;
+        return currentSS;
     }
 
-    private void notifySSCreated(SummarySheet ss) {
 
-    }
 
     public void setCurrent(SummarySheet ss) {
         this.currentSS = ss;
     }
 
-    public
+    public Task addTask(Job job) throws UseCaseLogicException{
+        User user = userMngr.getCurrentUser();
+        if(user.isChef()==false){
+            throw new UseCaseLogicException();
+        }
+        if(currentSS==null){
+            throw new UseCaseLogicException();
+        }
+        Task t = currentSS.addTask(job);
+        this.notifyTaskAdded(t);
+    }
 
 
 }

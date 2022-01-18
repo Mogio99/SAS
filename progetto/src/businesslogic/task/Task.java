@@ -1,5 +1,6 @@
 package businesslogic.task;
 import businesslogic.disponibility.Cook;
+import businesslogic.job.Job;
 import businesslogic.turn.TurnKitchen;
 import recipe.Recipe;
 
@@ -14,10 +15,10 @@ public class Task {
     private ArrayList<TurnKitchen>  turnList;
     private Job consistingJob;
 
-    public Task(Recipe rec) {
-        this.consistingJob(rec);
+    public Task(Job rec) {
+        this.consistingJob = rec;
+
     }
 
-    private void consistingJob(recipe.Recipe rec) {
-    }
+
 }

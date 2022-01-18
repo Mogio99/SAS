@@ -1,4 +1,5 @@
 package businesslogic.task;
+import businesslogic.job.Job;
 import businesslogic.menu.Menu;
 import businesslogic.service.Service;
 import businesslogic.user.User;
@@ -12,11 +13,18 @@ public class SummarySheet {
     public SummarySheet(Service s, User user, Menu menu) {
         this.owner = user;
         this.serviceUsed = s;
-        ArrayList<recipe.Recipe> arrayListRecipe = menu.getAllRecipe;
+        ArrayList<Job> arrayListJob = menu.getAllJob;
         taskList = new ArrayList<Task>();
         int i = 0;
-        for(i=0;i<arrayListRecipe.size();i++){
-            Task task = new Task(arrayListRecipe.get(i));
+        for(i=0;i<arrayListJob.size();i++){
+            Task task = new Task(arrayListJob.get(i));
+            taskList.add(task);
         }
+    }
+
+    public Task addTask(Job job) {
+        Task turn = new Task(job);
+        taskList.add(turn);
+        return turn;
     }
 }
