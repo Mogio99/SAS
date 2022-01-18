@@ -1,4 +1,4 @@
-package menu;
+package businesslogic.menu;
 
 import businesslogic.CatERing;
 import businesslogic.recipe.Recipe;
@@ -18,6 +18,7 @@ import java.util.Map;
 
 public class Menu {
     private static Map<Integer, Menu> loadedMenus = FXCollections.observableHashMap();
+    public ArrayList<recipe.Recipe> getAllRecipe;
     private int id;
     private String title;
     private boolean published;
