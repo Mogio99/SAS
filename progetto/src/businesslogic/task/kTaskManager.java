@@ -22,41 +22,17 @@ public class kTaskManager {
     public kTaskManager(){
         eventReceivers = new ArrayList<>();
     }
-    private void notifySSCreated(SummarySheet ss) {
-        for(KTaskEventReceiver kitchenTaskER: this.eventReceivers){
-            kitchenTaskER.updateSSCreated(ss);
-        }
-    }
-    private void notifyTaskAdded(Task t) {
-        for(KTaskEventReceiver kitchenTaskER: this.eventReceivers){
-            kitchenTaskER.updateTaskAdded(t);
-        }
-    }
-    private void notifyTaskSorted(ArrayList<Task> newtl) {
-        for(KTaskEventReceiver kitchenTaskER: this.eventReceivers){
-            kitchenTaskER.updateTaskSorted(newtl);
-        }
-    }
-    private void notifyTaskAssigned(Task task) {
-        for(KTaskEventReceiver kitchenTaskER: this.eventReceivers){
-            kitchenTaskER.updateTaskAssigned(task);
-        }
-    }
-    private void notifyKitTurnSat(TurnKitchen kitchenTurn) {
-        for(KTaskEventReceiver kitchenTaskER: this.eventReceivers){
-            kitchenTaskER.updateKitTurnSat(kitchenTurn);
-        }
-    }
-    /*creazione del summary sheet*/
+
+    /*DSD1 creazione del summary sheet*/
     public SummarySheet createSS(Service s) throws UseCaseLogicException{
         User user = CatERing.getInstance().getUserManager().getCurrentUser();
-        if(user.isChef()==false){
+        if(!user.isChef()){
             throw new UseCaseLogicException();
         }
 
         Menu menu=s.getMenu();
 
-        if(menu.isOwner(user)==false){
+        if(!menu.isOwner(user)){
             throw new UseCaseLogicException();
         }
         SummarySheet ss = new SummarySheet(s,user,menu);
@@ -64,14 +40,26 @@ public class kTaskManager {
         this.notifySSCreated(ss);
         return currentSS;
     }
-
+    /*DSD1a*/
+    public SummarySheet loadSS(SummarySheet ss) throws UseCaseLogicException,SSException{
+        User user = CatERing.getInstance().getUserManager().getCurrentUser();
+        if(!user.isChef()) {
+            throw new UseCaseLogicException();
+        }
+        boolean rightOwner=user.isOwner(user);
+        if(!rightOwner){
+            throw new SSException();
+        }
+        this.setCurrent(ss);
+        return currentSS;
+    }
     public void setCurrent(SummarySheet ss) {
         this.currentSS = ss;
     }
-    /*aggiunta di lavori*/
+    /*DSD2 aggiunta di lavori*/
     public Task addTask(Job job) throws UseCaseLogicException,SSException{
         User user = CatERing.getInstance().getUserManager().getCurrentUser();
-        if(user.isChef()==false){
+        if(!user.isChef()){
             throw new UseCaseLogicException();
         }
         if(currentSS==null){
@@ -81,6 +69,24 @@ public class kTaskManager {
         this.notifyTaskAdded(t);
         return t;
     }
+    /*DSD 2a*/
+    public void deleteTask(Task task) throws UseCaseLogicException,SSException {
+        User user = CatERing.getInstance().getUserManager().getCurrentUser();
+        if (!user.isChef()) {
+            throw new UseCaseLogicException();
+        }
+        if (currentSS == null) {
+            throw new SSException();
+        }
+        if(!currentSS.contains(task)){
+            throw new SSException();
+        }
+        currentSS.deleteTask(task);
+        this.notifyTaskRemoved(task);
+    }
+
+
+
     /*DSD 3 ritorna una lista ordinata dei Task*/
     public ArrayList<Task> sortTask(ArrayList<Task> newtl) throws UseCaseLogicException,SSException{
         User user = CatERing.getInstance().getUserManager().getCurrentUser();
@@ -130,6 +136,30 @@ public class kTaskManager {
         currentSS.assigneTask(task,tlList,portion,duration,cook);
         this.notifyTaskAssigned(task);
     }
+    /*DSD5a modifica*/
+    public void modifyTask(Task task, ArrayList<Turn> tlList, String portion, Time duration, Cook cook)
+            throws UseCaseLogicException,SSException{
+        User user = CatERing.getInstance().getUserManager().getCurrentUser();
+        int i = 0;
+        if(!user.isChef()){
+            throw new UseCaseLogicException();
+        }
+        if(currentSS == null){
+            throw new SSException();
+        }
+        for(i=0;i< tlList.size();i++){
+            if(tlList.get(i).isSatured()){
+                throw new SSException();
+            }
+        }
+        if(!currentSS.contains(task)){
+            throw new SSException();
+        }
+        currentSS.modifyTask(task,tlList,portion,duration,cook);
+        this.notifyTaskModify(task);
+    }
+
+
     /*DSD 6 per settare il valore di saturazione del turno di */
     public void setSaturation(TurnKitchen kitchenTurn,boolean val)
         throws SSException,UseCaseLogicException{
@@ -157,6 +187,41 @@ public class kTaskManager {
     public void assigneTask(Task task, ArrayList<Turn> tlList,Time duration) throws UseCaseLogicException, SSException {
         assigneTask(task,tlList,null,duration,null);
     }
+    private void notifySSCreated(SummarySheet ss) {
+        for(KTaskEventReceiver kitchenTaskER: this.eventReceivers){
+            kitchenTaskER.updateSSCreated(ss);
+        }
+    }
+    private void notifyTaskAdded(Task t) {
+        for(KTaskEventReceiver kitchenTaskER: this.eventReceivers){
+            kitchenTaskER.updateTaskAdded(t);
+        }
+    }
+    private void notifyTaskSorted(ArrayList<Task> newtl) {
+        for(KTaskEventReceiver kitchenTaskER: this.eventReceivers){
+            kitchenTaskER.updateTaskSorted(newtl);
+        }
+    }
+    private void notifyTaskAssigned(Task task) {
+        for(KTaskEventReceiver kitchenTaskER: this.eventReceivers){
+            kitchenTaskER.updateTaskAssigned(task);
+        }
+    }
+    private void notifyKitTurnSat(TurnKitchen kitchenTurn) {
+        for(KTaskEventReceiver kitchenTaskER: this.eventReceivers){
+            kitchenTaskER.updateKitTurnSat(kitchenTurn);
+        }
+    }
+    private void notifyTaskRemoved(Task task) {
+        for(KTaskEventReceiver kitchenTaskER: this.eventReceivers){
+            kitchenTaskER.updateTaskRemoved(task);
+        }
+    }
 
+    private void notifyTaskModify(Task task) {
+        for(KTaskEventReceiver kitchenTaskER: this.eventReceivers){
+            kitchenTaskER.updateTaskModify(task);
+        }
+    }
 
 }

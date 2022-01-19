@@ -39,4 +39,21 @@ public class Task {
         //TODO:aggiungere if in caso
 
     }
+
+    public void modifyTask(Task task, ArrayList<Turn> tlList, String portion, Time duration, Cook cook) throws SSException{
+        if(portion!=null){
+            this.quantity=portion;
+        }
+        if(duration!=null){
+            this.time=duration;
+        }
+        if(cook!=null){
+            if(cook.isAvaible(turnList)){
+                this.cook=cook;
+            }
+        }else{
+            throw new SSException();
+        }
+        //TODO:aggiungere if in caso bisonga aggiungere tlList, non so che scrivere
+    }
 }

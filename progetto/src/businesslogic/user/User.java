@@ -15,6 +15,10 @@ public class User {
 
     private static Map<Integer, User> loadedUsers = FXCollections.observableHashMap();
 
+    public boolean isOwner(User user) {
+        return true; //TODO: devo aggiungere qualcosa in futuro
+    }
+
     public static enum Role {SERVIZIO, CUOCO, CHEF, ORGANIZZATORE};
 
     private int id;

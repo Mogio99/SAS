@@ -47,4 +47,13 @@ public class SummarySheet {
         task.assigneTask(task,tlList,portion,duration,cook);
 
     }
+
+    public void deleteTask(Task task) {
+        this.taskList.remove(task);
+    }
+
+    public void modifyTask(Task task, ArrayList<Turn> tlList, String portion, Time duration, Cook cook)     throws SSException {
+        task.modifyTask(task,tlList,portion,duration,cook);
+
+    }
 }

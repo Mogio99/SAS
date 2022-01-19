@@ -15,4 +15,8 @@ public interface KTaskEventReceiver {
     public void updateTaskAssigned(Task task);
 
     public void updateKitTurnSat(TurnKitchen kitchenTurn);
+
+    public void updateTaskRemoved(Task task);
+
+    public void updateTaskModify(Task task);
 }
