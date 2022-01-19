@@ -1,8 +1,9 @@
 package businesslogic.task;
+import businesslogic.SSException;
 import businesslogic.disponibility.Cook;
 import businesslogic.job.Job;
-import businesslogic.turn.TurnKitchen;
-import recipe.Recipe;
+import businesslogic.shift.Turn;
+import businesslogic.shift.TurnKitchen;
 
 import java.sql.Time;
 import java.util.ArrayList;
@@ -21,4 +22,21 @@ public class Task {
     }
 
 
+    public void assigneTask(Task task, ArrayList<Turn> tlList, String portion, Time duration, Cook cook) throws SSException {
+        if(portion!=null){
+            this.quantity=portion;
+        }
+        if(duration!=null){
+            this.time=duration;
+        }
+        if(cook!=null){
+            if(cook.isAvaible(turnList)){
+                this.cook=cook;
+            }
+        }else{
+            throw new SSException();
+        }
+        //TODO:aggiungere if in caso
+
+    }
 }
