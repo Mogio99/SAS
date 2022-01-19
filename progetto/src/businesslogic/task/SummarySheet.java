@@ -1,8 +1,13 @@
 package businesslogic.task;
+import businesslogic.SSException;
+import businesslogic.disponibility.Cook;
 import businesslogic.job.Job;
 import businesslogic.menu.Menu;
 import businesslogic.service.Service;
+import businesslogic.shift.Turn;
 import businesslogic.user.User;
+
+import java.sql.Time;
 import java.util.ArrayList;
 
 public class SummarySheet {
@@ -31,5 +36,15 @@ public class SummarySheet {
     public ArrayList<Task> sortTask(ArrayList<Task> newtl) {
         this.taskList= /*TODO:non so cosa devo fare*/
         return taskList;
+    }
+
+    public boolean contains(Task task){
+        return taskList.contains(task);
+    }
+
+    public void assigneTask(Task task, ArrayList<Turn> tlList, String portion, Time duration, Cook cook)
+    throws SSException {
+        task.assigneTask(task,tlList,portion,duration,cook);
+
     }
 }
