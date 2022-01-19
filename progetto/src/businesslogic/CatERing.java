@@ -1,3 +1,4 @@
+package businesslogic;
 import businesslogic.event.EventManager;
 import businesslogic.menu.Menu;
 import businesslogic.menu.MenuManager;

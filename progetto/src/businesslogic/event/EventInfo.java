@@ -1,4 +1,4 @@
-package event;
+package businesslogic.event;
 
 import businesslogic.user.User;
 import javafx.collections.FXCollections;

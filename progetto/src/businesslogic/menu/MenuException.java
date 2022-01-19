@@ -1,4 +1,4 @@
-package menu;
+package businesslogic.menu;
 
 public class MenuException extends Exception {
 }

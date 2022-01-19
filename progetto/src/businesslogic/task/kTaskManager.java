@@ -1,4 +1,6 @@
 package businesslogic.task;
+import businesslogic.CatERing;
+import businesslogic.SSException;
 import businesslogic.job.Job;
 import businesslogic.service.Service;
 import businesslogic.user.User;
@@ -10,6 +12,10 @@ public class kTaskManager {
     private ArrayList<KTaskEventReceiver> eventReceivers;
     private SummarySheet currentSS;
 
+    /*costruttore*/
+    public kTaskManager(){
+        eventReceivers = new ArrayList<>();
+    }
     private void notifySSCreated(SummarySheet ss) {
         for(KTaskEventReceiver kitchenTaskER: this.eventReceivers){
             kitchenTaskER.updateSSCreated(ss);
@@ -20,8 +26,14 @@ public class kTaskManager {
             kitchenTaskER.updateTaskAdded(t);
         }
     }
+    private void notifyTaskSorted(ArrayList<Task> newtl) {
+        for(KTaskEventReceiver kitchenTaskER: this.eventReceivers){
+            kitchenTaskER.updateTaskSorted(newtl);
+        }
+    }
+    /*creazione del summary sheet*/
     public SummarySheet createSS(Service s) throws UseCaseLogicException{
-        User user = userMngr.getCurrentUser();
+        User user = CatERing.getInstance().getUserManager().getCurrentUser();
         if(user.isChef()==false){
             throw new UseCaseLogicException();
         }
@@ -37,23 +49,38 @@ public class kTaskManager {
         return currentSS;
     }
 
-
-
     public void setCurrent(SummarySheet ss) {
         this.currentSS = ss;
     }
-
-    public Task addTask(Job job) throws UseCaseLogicException{
-        User user = userMngr.getCurrentUser();
+    /*aggiunta di lavori*/
+    public Task addTask(Job job) throws UseCaseLogicException,SSException{
+        User user = CatERing.getInstance().getUserManager().getCurrentUser();
         if(user.isChef()==false){
             throw new UseCaseLogicException();
         }
         if(currentSS==null){
-            throw new UseCaseLogicException();
+            throw new SSException();
         }
         Task t = currentSS.addTask(job);
         this.notifyTaskAdded(t);
+        return t;
     }
+
+    public ArrayList<Task> sortTask(ArrayList<Task> newtl) throws UseCaseLogicException,SSException{
+        User user = CatERing.getInstance().getUserManager().getCurrentUser();
+        ArrayList<Task> sort;
+        if(user.isChef()==false){
+            throw new UseCaseLogicException();
+        }
+        if(currentSS == null){
+            throw new SSException();
+        }
+        sort=currentSS.sortTask(newtl);
+        notifyTaskSorted(sort);
+        return sort;
+    }
+
+    public sheet
 
 
 }

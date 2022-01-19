@@ -1,4 +1,4 @@
-package menu;
+package businesslogic.menu;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;

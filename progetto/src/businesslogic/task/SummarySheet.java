@@ -27,4 +27,9 @@ public class SummarySheet {
         taskList.add(turn);
         return turn;
     }
+
+    public ArrayList<Task> sortTask(ArrayList<Task> newtl) {
+        this.taskList= /*TODO:non so cosa devo fare*/
+        return taskList;
+    }
 }
