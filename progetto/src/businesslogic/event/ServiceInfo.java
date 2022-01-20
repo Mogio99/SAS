@@ -1,5 +1,6 @@
 package businesslogic.event;
 
+import businesslogic.menu.Menu;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import persistence.PersistenceManager;
@@ -17,6 +18,7 @@ public class ServiceInfo implements EventItemInfo {
     private Time timeStart;
     private Time timeEnd;
     private int participants;
+    private Menu menu;
 
     public ServiceInfo(String name) {
         this.name = name;
@@ -49,4 +51,6 @@ public class ServiceInfo implements EventItemInfo {
 
         return result;
     }
+
+
 }

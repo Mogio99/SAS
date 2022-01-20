@@ -19,4 +19,8 @@ public interface KTaskEventReceiver {
     public void updateTaskRemoved(Task task);
 
     public void updateTaskModify(Task task);
+
+    public void updateTaskDisassigned(Task task);
+
+    public void updateTaskDone(Task task);
 }

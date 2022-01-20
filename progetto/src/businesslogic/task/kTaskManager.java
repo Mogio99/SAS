@@ -2,8 +2,8 @@ package businesslogic.task;
 import businesslogic.CatERing;
 import businesslogic.SSException;
 import businesslogic.disponibility.Cook;
+import businesslogic.event.ServiceInfo;
 import businesslogic.job.Job;
-import businesslogic.service.Service;
 import businesslogic.shift.ShiftBoard;
 import businesslogic.shift.Turn;
 import businesslogic.shift.TurnKitchen;
@@ -11,6 +11,7 @@ import businesslogic.user.User;
 import businesslogic.UseCaseLogicException;
 import businesslogic.menu.Menu;
 
+import java.rmi.server.SocketSecurityException;
 import java.sql.Time;
 import java.util.ArrayList;
 
@@ -24,7 +25,7 @@ public class kTaskManager {
     }
 
     /*DSD1 creazione del summary sheet*/
-    public SummarySheet createSS(Service s) throws UseCaseLogicException{
+    public SummarySheet createSS(ServiceInfo s) throws UseCaseLogicException{
         User user = CatERing.getInstance().getUserManager().getCurrentUser();
         if(!user.isChef()){
             throw new UseCaseLogicException();
@@ -32,9 +33,9 @@ public class kTaskManager {
 
         Menu menu=s.getMenu();
 
-        if(!menu.isOwner(user)){
+        /*if(!menu.isOwner(user)){
             throw new UseCaseLogicException();
-        }
+        }*/
         SummarySheet ss = new SummarySheet(s,user,menu);
         this.setCurrent(ss);
         this.notifySSCreated(ss);
@@ -158,7 +159,37 @@ public class kTaskManager {
         currentSS.modifyTask(task,tlList,portion,duration,cook);
         this.notifyTaskModify(task);
     }
+    /*DSD5b estensione*/
+    public void disassignTask(Task task) throws SSException,UseCaseLogicException{
+        User user = CatERing.getInstance().getUserManager().getCurrentUser();
+        if(!user.isChef()){
+            throw new UseCaseLogicException();
+        }
+        if(currentSS == null){
+            throw new SSException();
+        }
+        if(!currentSS.contains(task)){
+            throw new SSException();
+        }
+        currentSS.disassignTask(task);
+        this.notifyDisassignTask(task);
 
+    }
+    /*DSD5c taskDone*/
+    public void taskDone(Task task) throws SSException,UseCaseLogicException{
+        User user = CatERing.getInstance().getUserManager().getCurrentUser();
+        if(!user.isChef()){
+            throw new UseCaseLogicException();
+        }
+        if(currentSS == null){
+            throw new SSException();
+        }
+        if(!currentSS.contains(task)){
+            throw new SSException();
+        }
+        currentSS.taskDone(task);
+        this.notifyTaskDone(task);
+    }
 
     /*DSD 6 per settare il valore di saturazione del turno di */
     public void setSaturation(TurnKitchen kitchenTurn,boolean val)
@@ -187,6 +218,42 @@ public class kTaskManager {
     public void assigneTask(Task task, ArrayList<Turn> tlList,Time duration) throws UseCaseLogicException, SSException {
         assigneTask(task,tlList,null,duration,null);
     }
+    public void assigneTask(Task task, ArrayList<Turn> tlList,Time duration,String portion) throws UseCaseLogicException, SSException {
+        assigneTask(task,tlList,portion,duration,null);
+    }
+    public void assigneTask(Task task, ArrayList<Turn> tlList,Time duration,Cook cook) throws UseCaseLogicException, SSException {
+        assigneTask(task,tlList,null,duration,cook);
+    }
+    public void assigneTask(Task task, ArrayList<Turn> tlList,Cook cook,String portion) throws UseCaseLogicException, SSException {
+        assigneTask(task,tlList,portion,null,cook);
+    }
+
+    public void modifyTask(Task task) throws UseCaseLogicException, SSException {
+        modifyTask(task,null,null,null,null);
+    }
+    public void modifyTask(Task task, ArrayList<Turn> tlList) throws UseCaseLogicException, SSException {
+        modifyTask(task,tlList,null,null,null);
+    }
+    public void modifyTask(Task task,String portion) throws UseCaseLogicException, SSException {
+        modifyTask(task,null,portion,null,null);
+    }
+    public void modifyTask(Task task,Time duration) throws UseCaseLogicException, SSException {
+        modifyTask(task,null,null,duration,null);
+    }
+    public void modifyTask(Task task, Cook cook) throws UseCaseLogicException, SSException {
+        modifyTask(task,null,null,null,cook);
+    }
+    public void modifyTask(Task task, ArrayList<Turn> tlList,Time duration,Cook cook) throws UseCaseLogicException, SSException {
+        modifyTask(task,tlList,null,duration,cook);
+    }
+    public void modifyTask(Task task, ArrayList<Turn> tlList,Cook cook,String portion) throws UseCaseLogicException, SSException {
+        modifyTask(task,tlList,portion,null,cook);
+    }
+    public void modifyTask(Task task, ArrayList<Turn> tlList,Time duration,String portion) throws UseCaseLogicException, SSException {
+        modifyTask(task,tlList,portion,duration,null);
+    }
+
+
     private void notifySSCreated(SummarySheet ss) {
         for(KTaskEventReceiver kitchenTaskER: this.eventReceivers){
             kitchenTaskER.updateSSCreated(ss);
@@ -224,4 +291,15 @@ public class kTaskManager {
         }
     }
 
+    private void notifyDisassignTask(Task task) {
+        for(KTaskEventReceiver kitchenTaskER: this.eventReceivers){
+            kitchenTaskER.updateTaskDisassigned(task);
+        }
+    }
+
+    private void notifyTaskDone(Task task) {
+        for(KTaskEventReceiver kitchenTaskER: this.eventReceivers){
+            kitchenTaskER.updateTaskDone(task);
+        }
+    }
 }

@@ -13,12 +13,12 @@ public class Task {
     private Time time;
     private boolean done;
     private Cook cook;
-    private ArrayList<TurnKitchen>  turnList;
+    private ArrayList<Turn> turnList;
     private Job consistingJob;
 
     public Task(Job rec) {
         this.consistingJob = rec;
-
+        turnList = new ArrayList<>();
     }
 
 
@@ -48,12 +48,29 @@ public class Task {
             this.time=duration;
         }
         if(cook!=null){
-            if(cook.isAvaible(turnList)){
+            if(cook.isAvaible(task.turnList)){
                 this.cook=cook;
             }
         }else{
             throw new SSException();
         }
-        //TODO:aggiungere if in caso bisonga aggiungere tlList, non so che scrivere
+        if(tlList!=null){
+            task.turnList.clear();
+            for(int i=0;i<tlList.size();i++){
+                task.turnList.add((TurnKitchen) tlList.get(i));
+            }
+        }
+    }
+
+    public void disassignTask() {
+        this.quantity=null;
+        this.time=null;
+        this.cook=null;
+        this.turnList.clear();
+        this.done=false;
+    }
+
+    public void done() {
+        this.done=true;
     }
 }

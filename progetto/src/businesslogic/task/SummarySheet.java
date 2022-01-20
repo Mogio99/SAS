@@ -1,6 +1,7 @@
 package businesslogic.task;
 import businesslogic.SSException;
 import businesslogic.disponibility.Cook;
+import businesslogic.event.ServiceInfo;
 import businesslogic.job.Job;
 import businesslogic.menu.Menu;
 import businesslogic.service.Service;
@@ -15,7 +16,7 @@ public class SummarySheet {
     private User owner;
     private Service serviceUsed;
 
-    public SummarySheet(Service s, User user, Menu menu) {
+    public SummarySheet(ServiceInfo s, User user, Menu menu) {
         this.owner = user;
         this.serviceUsed = s;
         ArrayList<Job> arrayListJob = menu.getAllJob;
@@ -34,7 +35,7 @@ public class SummarySheet {
     }
 
     public ArrayList<Task> sortTask(ArrayList<Task> newtl) {
-        this.taskList= /*TODO:non so cosa devo fare*/
+        this.taskList= newtl;/*TODO:non so cosa devo fare*/
         return taskList;
     }
 
@@ -55,5 +56,13 @@ public class SummarySheet {
     public void modifyTask(Task task, ArrayList<Turn> tlList, String portion, Time duration, Cook cook)     throws SSException {
         task.modifyTask(task,tlList,portion,duration,cook);
 
+    }
+
+    public void disassignTask(Task task) {
+        task.disassignTask();
+    }
+
+    public void taskDone(Task task) {
+        task.done();
     }
 }
