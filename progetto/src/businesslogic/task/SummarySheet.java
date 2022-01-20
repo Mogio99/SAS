@@ -4,7 +4,6 @@ import businesslogic.disponibility.Cook;
 import businesslogic.event.ServiceInfo;
 import businesslogic.job.Job;
 import businesslogic.menu.Menu;
-import businesslogic.service.Service;
 import businesslogic.shift.Turn;
 import businesslogic.user.User;
 
@@ -14,7 +13,7 @@ import java.util.ArrayList;
 public class SummarySheet {
     private ArrayList<Task> taskList;
     private User owner;
-    private Service serviceUsed;
+    private ServiceInfo serviceUsed;
 
     public SummarySheet(ServiceInfo s, User user, Menu menu) {
         this.owner = user;
