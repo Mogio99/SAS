@@ -18,7 +18,6 @@ public class ServiceInfo implements EventItemInfo {
     private Time timeStart;
     private Time timeEnd;
     private int participants;
-    private Menu menu;
 
     public ServiceInfo(String name) {
         this.name = name;
@@ -51,6 +50,43 @@ public class ServiceInfo implements EventItemInfo {
 
         return result;
     }
+    public static ServiceInfo loadServiceById(String s, int id_service){
+        String query = "SELECT id, name, service_date, time_start, time_end, expected_participants " +
+                "FROM Services WHERE id = " + id_service;
+        ServiceInfo serv = new ServiceInfo(s);
+        PersistenceManager.executeQuery(query, new ResultHandler() {
+            @Override
+            public void handle(ResultSet rs) throws SQLException {
 
+                serv.id = rs.getInt("id");
+                serv.date = rs.getDate("service_date");
+                serv.timeStart = rs.getTime("time_start");
+                serv.timeEnd = rs.getTime("time_end");
+                serv.participants = rs.getInt("expected_participants");
+            }
+        });
 
+        return serv;
+    }
+
+    public Menu getMenu() {
+        Menu menu = null;
+        final int[] m = {0};
+        ObservableList<ServiceInfo> result = FXCollections.observableArrayList();
+        String query = "SELECT approved_menu_id " +
+                "FROM Services WHERE id = " + this.id;
+        PersistenceManager.executeQuery(query, new ResultHandler() {
+            public void handle(ResultSet rs) throws SQLException {
+                m[0] = rs.getInt("approved_menu_id");
+            }
+        });
+        System.out.println(m[0]);
+        ObservableList<Menu> listMenu =Menu.loadAllMenus();
+        for(int i = 0; i< listMenu.size();i++){
+            if(listMenu.get(i).getId() == m[0]){
+                menu = listMenu.get(i);
+            }
+        }
+        return menu;
+    }
 }

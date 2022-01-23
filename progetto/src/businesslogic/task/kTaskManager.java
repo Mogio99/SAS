@@ -30,15 +30,16 @@ public class kTaskManager {
         if(!user.isChef()){
             throw new UseCaseLogicException();
         }
-
-        //Menu menu=s.getMenu();
-
-        /*if(!menu.isOwner(user)){
+        Menu menu=s.getMenu();
+        if(menu==null){
+            System.out.println("menu è nullo");
+        }
+        if(!menu.isOwner(user)){
             throw new UseCaseLogicException();
-        }*/
-        /*SummarySheet ss = new SummarySheet(s,user,menu);
+        }
+        SummarySheet ss = new SummarySheet(s,user,menu);
         this.setCurrent(ss);
-        this.notifySSCreated(ss);*/
+        this.notifySSCreated(ss);
         return currentSS;
     }
     /*DSD1a*/

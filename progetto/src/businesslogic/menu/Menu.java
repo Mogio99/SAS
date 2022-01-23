@@ -83,6 +83,8 @@ public class Menu {
 
     }
 
+
+
     public boolean getFeatureValue(String feature) {
         return this.featuresMap.get(feature);
     }
@@ -124,6 +126,7 @@ public class Menu {
     public int getId() {
         return id;
     }
+
 
     public String getTitle() {
         return this.title;
