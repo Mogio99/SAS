@@ -1,6 +1,7 @@
 package businesslogic.menu;
 
 import businesslogic.CatERing;
+import businesslogic.event.ServiceInfo;
 import businesslogic.job.Job;
 import businesslogic.recipe.Recipe;
 import businesslogic.user.User;
@@ -529,5 +530,19 @@ public class Menu {
                 // no generated ids to handle
             }
         });
+    }
+
+    public ArrayList<Recipe> getAllRecipe() {
+        ArrayList<Recipe> listRecipe = new ArrayList<>();
+        String query = "SELECT recipe_id,description " +
+                "FROM MenuItems WHERE menu_id = " + this.getId() ;
+        PersistenceManager.executeQuery(query, new ResultHandler() {
+            @Override
+            public void handle(ResultSet rs) throws SQLException {
+                Recipe r = new Recipe(rs.getString("description"), rs.getInt("recipe_id"));
+                listRecipe.add(r);
+            }
+        });
+        return listRecipe;
     }
 }

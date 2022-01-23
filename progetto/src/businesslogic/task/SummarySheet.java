@@ -4,6 +4,7 @@ import businesslogic.disponibility.Cook;
 import businesslogic.event.ServiceInfo;
 import businesslogic.job.Job;
 import businesslogic.menu.Menu;
+import businesslogic.recipe.Recipe;
 import businesslogic.shift.Turn;
 import businesslogic.user.User;
 
@@ -18,11 +19,12 @@ public class SummarySheet {
     public SummarySheet(ServiceInfo s, User user, Menu menu) {
         this.owner = user;
         this.serviceUsed = s;
-        ArrayList<Job> arrayListJob = menu.getAllJob;
+        ArrayList<Recipe> arrayListRecipe = menu.getAllRecipe();
         taskList = new ArrayList<Task>();
         int i = 0;
-        for(i=0;i<arrayListJob.size();i++){
-            Task task = new Task(arrayListJob.get(i));
+        for(i=0;i<arrayListRecipe.size();i++){
+            System.out.println(arrayListRecipe.get(i).getName()+arrayListRecipe.get(i).getId());
+            Task task = new Task(arrayListRecipe.get(i));
             taskList.add(task);
         }
     }

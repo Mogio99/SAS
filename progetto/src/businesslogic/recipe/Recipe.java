@@ -1,5 +1,6 @@
 package businesslogic.recipe;
 
+import businesslogic.job.Job;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import persistence.PersistenceManager;
@@ -9,7 +10,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.*;
 
-public class Recipe {
+public class Recipe extends Job {
     private static Map<Integer, Recipe> all = new HashMap<>();
 
     private int id;
@@ -17,6 +18,10 @@ public class Recipe {
 
     private Recipe() {
 
+    }
+    public Recipe(String name,int id) {
+        this.id=id;
+        this.name=name;
     }
 
     public Recipe(String name) {
