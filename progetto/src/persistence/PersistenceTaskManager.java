@@ -11,7 +11,6 @@ public class PersistenceTaskManager implements KTaskEventReceiver {
 
     @Override
     public void updateSSCreated(SummarySheet ss) {
-        System.out.println("sono qua ");
         SummarySheet.saveNewSS(ss);
     }
 

@@ -29,7 +29,7 @@ public class SummarySheet {
         taskList = new ArrayList<Task>();
         int i = 0;
         for(i=0;i<arrayListRecipe.size();i++){
-            System.out.println(arrayListRecipe.get(i).getName()+arrayListRecipe.get(i).getId());
+            System.out.println(arrayListRecipe.get(i));
             Task task = new Task(arrayListRecipe.get(i));
             taskList.add(task);
         }
@@ -75,25 +75,22 @@ public class SummarySheet {
     }
 
     public static void saveNewSS(SummarySheet ss) {
-        System.out.println("eccomi");
-        String ssInsert = "INSERT INTO catering.summarysheet (user, service_id, task) VALUES (?, ?, ?);";
-        int[] result = PersistenceManager.executeBatchUpdate(ssInsert, 1, new BatchUpdateHandler() {
-            @Override
-            public void handleBatchItem(PreparedStatement ps, int batchCount) throws SQLException {
-                for (int i = 0; i < ss.taskList.size(); i++) {
-                    ps.setString(1, String.valueOf(ss.owner.getId()));
+            String ssInsert = "INSERT INTO catering.SummarySheet(user, service_id,service_name) VALUES (?, ?,?);";
+            int[] result = PersistenceManager.executeBatchUpdate(ssInsert, 1, new BatchUpdateHandler() {
+                @Override
+                public void handleBatchItem(PreparedStatement ps, int batchCount) throws SQLException {
+                    ps.setInt(1,(ss.owner.getId()));
                     ps.setInt(2, ss.serviceUsed.getId());
-                    ps.setString(3, String.valueOf(ss.taskList.get(i)));
+                    ps.setString(3, ss.serviceUsed.getName());
+                }
 
+                @Override
+                public void handleGeneratedIds(ResultSet rs, int count) throws SQLException {
+                    if (count == 0) {
+                        ss.id = rs.getInt(1);
+                    }
                 }
-            }
-            @Override
-            public void handleGeneratedIds(ResultSet rs, int count) throws SQLException {
-                if (count == 0) {
-                    ss.id = rs.getInt(1);
-                }
-            }
-        });
+            });
 
     }
 }

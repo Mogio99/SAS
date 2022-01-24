@@ -9,6 +9,7 @@ import java.sql.Time;
 import java.util.ArrayList;
 
 public class Task {
+    private int idRecipe;
     private String quantity;
     private Time time;
     private boolean done;
@@ -18,10 +19,13 @@ public class Task {
 
     public Task(Job rec) {
         this.consistingJob = rec;
+        this.idRecipe = rec.getId();
         turnList = new ArrayList<>();
     }
 
-
+    public int getIdRecipe(){
+        return this.idRecipe;
+    }
     public void assigneTask(Task task, ArrayList<Turn> tlList, String portion, Time duration, Cook cook) throws SSException {
         if(portion!=null){
             this.quantity=portion;
@@ -72,5 +76,9 @@ public class Task {
 
     public void done() {
         this.done=true;
+    }
+
+    public Job getTaskName(){
+        return this.consistingJob;
     }
 }

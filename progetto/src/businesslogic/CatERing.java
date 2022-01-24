@@ -8,6 +8,7 @@ import businesslogic.task.kTaskManager;
 import businesslogic.user.UserManager;
 import persistence.MenuPersistence;
 import persistence.PersistenceManager;
+import persistence.PersistenceTaskManager;
 
 public class CatERing {
     private static CatERing singleInstance;
@@ -26,7 +27,9 @@ public class CatERing {
     private TurnManager turnMgr;
     private kTaskManager taskMgr;
 
+
     private MenuPersistence menuPersistence;
+    private PersistenceTaskManager taskPersistence;
 
     private CatERing() {
         menuMgr = new MenuManager();
@@ -36,7 +39,9 @@ public class CatERing {
         turnMgr = new TurnManager();
         menuPersistence = new MenuPersistence();
         taskMgr = new kTaskManager();
+        taskPersistence = new PersistenceTaskManager();
         menuMgr.addEventReceiver(menuPersistence);
+        taskMgr.addEventReceiver(taskPersistence);
     }
 
 

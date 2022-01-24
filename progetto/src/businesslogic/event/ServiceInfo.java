@@ -32,6 +32,9 @@ public class ServiceInfo implements EventItemInfo {
     public int getId(){
         return this.id;
     }
+    public String getName(){
+        return this.name;
+    }
     // STATIC METHODS FOR PERSISTENCE
 
     public static ObservableList<ServiceInfo> loadServiceInfoForEvent(int event_id) {

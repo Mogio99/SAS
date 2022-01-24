@@ -10,6 +10,7 @@ import businesslogic.shift.TurnKitchen;
 import businesslogic.user.User;
 import businesslogic.UseCaseLogicException;
 import businesslogic.menu.Menu;
+import persistence.PersistenceTaskManager;
 
 import javax.sound.midi.SysexMessage;
 import java.rmi.server.SocketSecurityException;
@@ -303,5 +304,9 @@ public class kTaskManager {
         for(KTaskEventReceiver kitchenTaskER: this.eventReceivers){
             kitchenTaskER.updateTaskDone(task);
         }
+    }
+
+    public void addEventReceiver(PersistenceTaskManager taskPersistence) {
+        eventReceivers.add(taskPersistence);
     }
 }
