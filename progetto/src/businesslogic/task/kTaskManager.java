@@ -11,6 +11,7 @@ import businesslogic.user.User;
 import businesslogic.UseCaseLogicException;
 import businesslogic.menu.Menu;
 
+import javax.sound.midi.SysexMessage;
 import java.rmi.server.SocketSecurityException;
 import java.sql.Time;
 import java.util.ArrayList;
@@ -31,13 +32,11 @@ public class kTaskManager {
             throw new UseCaseLogicException();
         }
         Menu menu=s.getMenu();
-        if(menu==null){
-            System.out.println("menu è nullo");
-        }
         if(!menu.isOwner(user)){
             throw new UseCaseLogicException();
         }
         SummarySheet ss = new SummarySheet(s,user,menu);
+
         this.setCurrent(ss);
         this.notifySSCreated(ss);
         return currentSS;
@@ -93,7 +92,7 @@ public class kTaskManager {
     public ArrayList<Task> sortTask(ArrayList<Task> newtl) throws UseCaseLogicException,SSException{
         User user = CatERing.getInstance().getUserManager().getCurrentUser();
         ArrayList<Task> sort;
-        if(user.isChef()==false){
+        if(!user.isChef()){
             throw new UseCaseLogicException();
         }
         if(currentSS == null){
@@ -256,9 +255,11 @@ public class kTaskManager {
 
 
     private void notifySSCreated(SummarySheet ss) {
-        for(KTaskEventReceiver kitchenTaskER: this.eventReceivers){
+        for(KTaskEventReceiver kitchenTaskER : eventReceivers){
+            System.out.println("sono arrivato fino a qua");
             kitchenTaskER.updateSSCreated(ss);
         }
+
     }
     private void notifyTaskAdded(Task t) {
         for(KTaskEventReceiver kitchenTaskER: this.eventReceivers){

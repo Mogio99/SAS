@@ -7,7 +7,12 @@ import businesslogic.menu.Menu;
 import businesslogic.recipe.Recipe;
 import businesslogic.shift.Turn;
 import businesslogic.user.User;
+import persistence.BatchUpdateHandler;
+import persistence.PersistenceManager;
 
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.sql.Time;
 import java.util.ArrayList;
 
@@ -15,6 +20,7 @@ public class SummarySheet {
     private ArrayList<Task> taskList;
     private User owner;
     private ServiceInfo serviceUsed;
+    private int id;
 
     public SummarySheet(ServiceInfo s, User user, Menu menu) {
         this.owner = user;
@@ -34,6 +40,7 @@ public class SummarySheet {
         taskList.add(turn);
         return turn;
     }
+
 
     public ArrayList<Task> sortTask(ArrayList<Task> newtl) {
         this.taskList= newtl;/*TODO:non so cosa devo fare*/
@@ -66,4 +73,29 @@ public class SummarySheet {
     public void taskDone(Task task) {
         task.done();
     }
+
+    public static void saveNewSS(SummarySheet ss) {
+        System.out.println("eccomi");
+        String ssInsert = "INSERT INTO catering.summarysheet (user, service_id, task) VALUES (?, ?, ?);";
+        int[] result = PersistenceManager.executeBatchUpdate(ssInsert, 1, new BatchUpdateHandler() {
+            @Override
+            public void handleBatchItem(PreparedStatement ps, int batchCount) throws SQLException {
+                for (int i = 0; i < ss.taskList.size(); i++) {
+                    ps.setString(1, String.valueOf(ss.owner.getId()));
+                    ps.setInt(2, ss.serviceUsed.getId());
+                    ps.setString(3, String.valueOf(ss.taskList.get(i)));
+
+                }
+            }
+            @Override
+            public void handleGeneratedIds(ResultSet rs, int count) throws SQLException {
+                if (count == 0) {
+                    ss.id = rs.getInt(1);
+                }
+            }
+        });
+
+    }
 }
+
+

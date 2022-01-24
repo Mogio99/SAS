@@ -23,11 +23,15 @@ public class ServiceInfo implements EventItemInfo {
         this.name = name;
     }
 
+    private ServiceInfo(){
+    }
 
     public String toString() {
         return name + ": " + date + " (" + timeStart + "-" + timeEnd + "), " + participants + " pp.";
     }
-
+    public int getId(){
+        return this.id;
+    }
     // STATIC METHODS FOR PERSISTENCE
 
     public static ObservableList<ServiceInfo> loadServiceInfoForEvent(int event_id) {
@@ -50,15 +54,15 @@ public class ServiceInfo implements EventItemInfo {
 
         return result;
     }
-    public static ServiceInfo loadServiceById(String s, int id_service){
+    public static ServiceInfo loadServiceById(int id_service){
         String query = "SELECT id, name, service_date, time_start, time_end, expected_participants " +
                 "FROM Services WHERE id = " + id_service;
-        ServiceInfo serv = new ServiceInfo(s);
+        ServiceInfo serv = new ServiceInfo();
         PersistenceManager.executeQuery(query, new ResultHandler() {
             @Override
             public void handle(ResultSet rs) throws SQLException {
-
                 serv.id = rs.getInt("id");
+                serv.name= rs.getString("name");
                 serv.date = rs.getDate("service_date");
                 serv.timeStart = rs.getTime("time_start");
                 serv.timeEnd = rs.getTime("time_end");
