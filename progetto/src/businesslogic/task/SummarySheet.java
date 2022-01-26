@@ -42,10 +42,10 @@ public class SummarySheet {
     }
     public Task addTask(Job job) {
         Task turn = new Task(job);
-        taskList.add(turn);
+        this.taskList.add(turn);
         return turn;
     }
-
+    public ArrayList<Task> getTaskList(){return this.taskList;}
 
     public ArrayList<Task> sortTask(ArrayList<Task> newtl) {
         this.taskList= newtl;/*TODO:non so cosa devo fare*/
