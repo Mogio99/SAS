@@ -7,8 +7,11 @@ import businesslogic.menu.Menu;
 import businesslogic.recipe.Recipe;
 import businesslogic.shift.Turn;
 import businesslogic.user.User;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import persistence.BatchUpdateHandler;
 import persistence.PersistenceManager;
+import persistence.ResultHandler;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -34,7 +37,9 @@ public class SummarySheet {
             taskList.add(task);
         }
     }
-
+    public SummarySheet(int id){
+        this.id=id;
+    }
     public Task addTask(Job job) {
         Task turn = new Task(job);
         taskList.add(turn);
@@ -73,7 +78,8 @@ public class SummarySheet {
     public void taskDone(Task task) {
         task.done();
     }
-
+    public String getServiceName(){return this.serviceUsed.getName();}
+    public int getId(){return this.id;}
     public static void saveNewSS(SummarySheet ss) {
             String ssInsert = "INSERT INTO catering.SummarySheet(user, service_id,service_name) VALUES (?, ?,?);";
             int[] result = PersistenceManager.executeBatchUpdate(ssInsert, 1, new BatchUpdateHandler() {
@@ -92,6 +98,26 @@ public class SummarySheet {
                 }
             });
 
+    }
+    public static SummarySheet loadSSId(int id){
+        SummarySheet ss = new SummarySheet(id);
+        ObservableList<ServiceInfo> result = FXCollections.observableArrayList();
+        String query = "SELECT id,user,service_id FROM summarysheet WHERE id = " + id;
+        PersistenceManager.executeQuery(query, new ResultHandler() {
+            @Override
+            public void handle(ResultSet rs) throws SQLException {
+                ss.owner = User.loadUserById(rs.getInt("user"));
+                ss.serviceUsed = ServiceInfo.loadServiceById(rs.getInt("service_id"));
+                Menu m = ss.serviceUsed.getMenu();
+                ss.taskList =new ArrayList<Task>();
+                ArrayList<Recipe> arrayListRecipe = m.getAllRecipe();
+                for(int i=0;i<arrayListRecipe.size();i++){
+                    Task t = new Task(arrayListRecipe.get(i));
+                    ss.taskList.add(t);
+                }
+            }
+        });
+        return ss;
     }
 }
 

@@ -27,14 +27,14 @@ public class kTaskManager {
     }
 
     /*DSD1 creazione del summary sheet*/
-    public SummarySheet createSS(ServiceInfo s) throws UseCaseLogicException{
+    public SummarySheet createSS(ServiceInfo s) throws UseCaseLogicException, SSException {
         User user = CatERing.getInstance().getUserManager().getCurrentUser();
         if(!user.isChef()){
             throw new UseCaseLogicException();
         }
         Menu menu=s.getMenu();
         if(!menu.isOwner(user)){
-            throw new UseCaseLogicException();
+            throw new SSException();
         }
         SummarySheet ss = new SummarySheet(s,user,menu);
 
@@ -58,6 +58,7 @@ public class kTaskManager {
     public void setCurrent(SummarySheet ss) {
         this.currentSS = ss;
     }
+
     /*DSD2 aggiunta di lavori*/
     public Task addTask(Job job) throws UseCaseLogicException,SSException{
         User user = CatERing.getInstance().getUserManager().getCurrentUser();
@@ -205,7 +206,7 @@ public class kTaskManager {
         kitchenTurn.setSaturation(val);
         this.notifyKitTurnSat(kitchenTurn);
     }
-
+    public SummarySheet getCurrentSS(){return this.currentSS;}
 
     public void assigneTask(Task task, ArrayList<Turn> tlList) throws UseCaseLogicException, SSException {
         assigneTask(task,tlList,null,null,null);

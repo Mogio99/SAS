@@ -23,7 +23,7 @@ public class ServiceInfo implements EventItemInfo {
         this.name = name;
     }
 
-    private ServiceInfo(){
+    public ServiceInfo(){
     }
 
     public String toString() {
