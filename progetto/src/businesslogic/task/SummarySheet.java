@@ -13,10 +13,7 @@ import persistence.BatchUpdateHandler;
 import persistence.PersistenceManager;
 import persistence.ResultHandler;
 
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Time;
+import java.sql.*;
 import java.util.ArrayList;
 
 public class SummarySheet {
@@ -125,10 +122,13 @@ public class SummarySheet {
         return ss;
     }
     private void saveNewTaskInSS(Task task) {
-        String query = "INSERT INTO catering.addtask (id_recipe,id_summarysheet) values (" +
+        Statement st;
+        ResultSet rs;
+        String query ="IF NOT EXISTS (SELECT * FROM catering.addtask WHERE id_recipe= "+
+                +task.getIdRecipe() + " AND id_summarysheet = "+ this.getId()+ " )"+
+                " INSERT INTO catering.addtask (id_recipe,id_summarysheet) values (" +
                 task.getIdRecipe() + "," + this.getId() + ");";
-        PersistenceManager.executeUpdate(query);
-
+        st=
     }
 }
 

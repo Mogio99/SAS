@@ -91,4 +91,7 @@ public class PersistenceManager {
     public static int getLastId() {
         return lastId;
     }
+    public static String getUrl(){return url;}
+    public static String getUsername(){return username;}
+    public static String getPassword(){return password;}
 }
