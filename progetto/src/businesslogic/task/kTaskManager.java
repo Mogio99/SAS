@@ -69,6 +69,7 @@ public class kTaskManager {
             throw new SSException();
         }
         Task t = currentSS.addTask(job);
+
         this.notifyTaskAdded(t);
         return t;
     }
@@ -258,7 +259,6 @@ public class kTaskManager {
 
     private void notifySSCreated(SummarySheet ss) {
         for(KTaskEventReceiver kitchenTaskER : eventReceivers){
-            System.out.println("sono arrivato fino a qua");
             kitchenTaskER.updateSSCreated(ss);
         }
 

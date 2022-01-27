@@ -1,5 +1,6 @@
 package persistence;
 
+import com.mysql.cj.exceptions.ConnectionIsClosedException;
 import com.sun.javafx.binding.StringFormatter;
 
 import java.sql.*;
@@ -91,7 +92,5 @@ public class PersistenceManager {
     public static int getLastId() {
         return lastId;
     }
-    public static String getUrl(){return url;}
-    public static String getUsername(){return username;}
-    public static String getPassword(){return password;}
+
 }

@@ -10,7 +10,7 @@ public class TestDSD1a {
         CatERing.getInstance().getUserManager().fakeLogin("Lidia");
         System.out.println(CatERing.getInstance().getUserManager().getCurrentUser());
         kTaskManager taskMgr = CatERing.getInstance().getTaskManager();
-        SummarySheet ss = SummarySheet.loadSSId(7);
+        SummarySheet ss = SummarySheet.loadSSId(13);
         taskMgr.loadSS(ss);
         System.out.println(taskMgr.getCurrentSS().getServiceName());
         System.out.println(taskMgr.getCurrentSS().getId());

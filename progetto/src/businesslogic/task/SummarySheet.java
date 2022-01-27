@@ -39,8 +39,8 @@ public class SummarySheet {
     }
     public Task addTask(Job job) {
         Task turn = new Task(job);
-        saveNewTaskInSS(turn);
         this.taskList.add(turn);
+        turn.saveNewTaskInSS(turn,this.id);
         return turn;
     }
 
@@ -99,36 +99,45 @@ public class SummarySheet {
                     }
                 }
             });
+            Menu m = ss.serviceUsed.getMenu();
+            ss.taskList =new ArrayList<Task>();
+            ArrayList<Recipe> arrayListRecipe = m.getAllRecipe();
+            for(int i=0;i<arrayListRecipe.size();i++) {
+                Task t = new Task(arrayListRecipe.get(i));
+                ss.taskList.add(t);
+                t.saveNewTaskInSS(t,ss.getId());
+            }
 
     }
     public static SummarySheet loadSSId(int id){
         SummarySheet ss = new SummarySheet(id);
-        ObservableList<ServiceInfo> result = FXCollections.observableArrayList();
         String query = "SELECT id,user,service_id FROM summarysheet WHERE id = " + id;
         PersistenceManager.executeQuery(query, new ResultHandler() {
             @Override
             public void handle(ResultSet rs) throws SQLException {
                 ss.owner = User.loadUserById(rs.getInt("user"));
                 ss.serviceUsed = ServiceInfo.loadServiceById(rs.getInt("service_id"));
-                Menu m = ss.serviceUsed.getMenu();
-                ss.taskList =new ArrayList<Task>();
-                ArrayList<Recipe> arrayListRecipe = m.getAllRecipe();
-                for(int i=0;i<arrayListRecipe.size();i++){
-                    Task t = new Task(arrayListRecipe.get(i));
-                    ss.taskList.add(t);
-                }
+            }
+        });
+        Menu m = ss.serviceUsed.getMenu();
+        ss.taskList =new ArrayList<Task>();
+        ArrayList<Recipe> arrayListRecipe = m.getAllRecipe();
+        for(int i=0;i<arrayListRecipe.size();i++){
+            Task t = new Task(arrayListRecipe.get(i));
+            System.out.println(arrayListRecipe.get(i));
+            ss.taskList.add(t);
+        }
+        query = "SELECT id_recipe FROM task WHERE id_summarysheet = " + id;
+        PersistenceManager.executeQuery(query, new ResultHandler() {
+            @Override
+            public void handle(ResultSet rs) throws SQLException {
+                    Task t = new Task(Recipe.loadRecipeById(rs.getInt("id_recipe")));
+                    if(!ss.taskList.contains(t)) {
+                        ss.taskList.add(t);
+                    }
             }
         });
         return ss;
-    }
-    private void saveNewTaskInSS(Task task) {
-        Statement st;
-        ResultSet rs;
-        String query ="IF NOT EXISTS (SELECT * FROM catering.addtask WHERE id_recipe= "+
-                +task.getIdRecipe() + " AND id_summarysheet = "+ this.getId()+ " )"+
-                " INSERT INTO catering.addtask (id_recipe,id_summarysheet) values (" +
-                task.getIdRecipe() + "," + this.getId() + ");";
-        st=
     }
 }
 
