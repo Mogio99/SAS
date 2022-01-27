@@ -42,9 +42,13 @@ public class SummarySheet {
     }
     public Task addTask(Job job) {
         Task turn = new Task(job);
+        saveNewTaskInSS(turn);
         this.taskList.add(turn);
         return turn;
     }
+
+
+
     public ArrayList<Task> getTaskList(){return this.taskList;}
 
     public ArrayList<Task> sortTask(ArrayList<Task> newtl) {
@@ -80,6 +84,7 @@ public class SummarySheet {
     }
     public String getServiceName(){return this.serviceUsed.getName();}
     public int getId(){return this.id;}
+
     public static void saveNewSS(SummarySheet ss) {
             String ssInsert = "INSERT INTO catering.SummarySheet(user, service_id,service_name) VALUES (?, ?,?);";
             int[] result = PersistenceManager.executeBatchUpdate(ssInsert, 1, new BatchUpdateHandler() {
@@ -118,6 +123,12 @@ public class SummarySheet {
             }
         });
         return ss;
+    }
+    private void saveNewTaskInSS(Task task) {
+        String query = "INSERT INTO catering.addtask (id_recipe,id_summarysheet) values (" +
+                task.getIdRecipe() + "," + this.getId() + ");";
+        PersistenceManager.executeUpdate(query);
+
     }
 }
 
