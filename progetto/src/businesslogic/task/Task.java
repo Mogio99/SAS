@@ -2,12 +2,16 @@ package businesslogic.task;
 import businesslogic.SSException;
 import businesslogic.disponibility.Cook;
 import businesslogic.job.Job;
+import businesslogic.menu.Menu;
+import businesslogic.menu.MenuItem;
 import businesslogic.recipe.Recipe;
 import businesslogic.shift.Turn;
 import businesslogic.shift.TurnKitchen;
+import persistence.BatchUpdateHandler;
 import persistence.PersistenceManager;
 import persistence.ResultHandler;
 
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Time;
@@ -15,6 +19,7 @@ import java.util.ArrayList;
 
 public class Task {
     private int idRecipe;
+    private int id;
     private String quantity;
     private Time time;
     private boolean done;
@@ -84,10 +89,23 @@ public class Task {
     }
     /*PERSISTANCE*/
     public void saveNewTaskInSS(Task task, int id) {
-           String query = "INSERT INTO task (id_recipe,id_summarysheet) values (" +
-                    task.getIdRecipe() + "," + id + ");";
-            PersistenceManager.executeUpdate(query);
+        String name_rec = task.consistingJob.toString();
+        String query = "INSERT INTO task (id_recipe,id_summarysheet,name_rec) VALUES (?, ?,?);";
+        int[] result = PersistenceManager.executeBatchUpdate(query, 1, new BatchUpdateHandler() {
+            @Override
+            public void handleBatchItem(PreparedStatement ps, int batchCount) throws SQLException {
+                ps.setInt(1,task.getIdRecipe());
+                ps.setInt(2, id);
+                ps.setString(3,name_rec);
+            }
 
+            @Override
+            public void handleGeneratedIds(ResultSet rs, int count) throws SQLException {
+                if (count == 0) {
+                    task.id = rs.getInt(1);
+                }
+            }
+        });
     }
     public static Task loadTaskById(int id_rep) {
 

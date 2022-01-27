@@ -283,3 +283,23 @@ UNLOCK TABLES;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
 -- Dump completed on 2020-06-05 15:04:25
+
+/*creazione della tabella task*/
+create table task
+(
+    id_recipe       int          null,
+    id_summarysheet int          null,
+    id              int auto_increment
+        primary key,
+    name_rec        varchar(128) not null
+);
+
+/*creazione della tabella summarysheet*/
+create table summarysheet
+(
+    id           int auto_increment
+        primary key,
+    user         int          not null,
+    service_id   int          not null,
+    service_name varchar(128) not null
+);

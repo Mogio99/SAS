@@ -18,12 +18,11 @@ public class TestDSD2a {
         System.out.println("ADD TASK");
         System.out.println("task presenti nella summary sheet 6:");
         taskMgr.loadSS(s);
-
         taskMgr.deleteTask(Task.loadTaskById(20));
         taskMgr.deleteTask(Task.loadTaskById(12));
         taskMgr.deleteTask(Task.loadTaskById(2));
 
-        System.out.println("\n Task presenti nella summary sheet 6 dopo aver aggiunto task:");
+
         SummarySheet.loadSSId(6);
     }
 }
