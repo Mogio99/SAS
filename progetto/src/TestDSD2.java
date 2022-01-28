@@ -15,7 +15,7 @@ public class TestDSD2 {
     public static void main (String [] args) throws UseCaseLogicException, SSException {
         CatERing.getInstance().getUserManager().fakeLogin("Lidia");
         System.out.println(CatERing.getInstance().getUserManager().getCurrentUser());
-        SummarySheet s = SummarySheet.loadSSId(13);
+        SummarySheet s = SummarySheet.loadSSId(24);
         kTaskManager taskMgr = CatERing.getInstance().getTaskManager();
         System.out.println("ADD TASK");
         System.out.println("task presenti nella summary sheet 6:");
@@ -30,6 +30,6 @@ public class TestDSD2 {
 
 
         System.out.println("\n Task presenti nella summary sheet 6 dopo aver aggiunto task:");
-        SummarySheet.loadSSId(13);
+        SummarySheet.loadSSId(24);
     }
 }

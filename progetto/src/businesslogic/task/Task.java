@@ -75,6 +75,8 @@ public class Task {
             }
         }
     }
+    public void setId(int id){this.id=id;}
+    public int getId(){return this.id;}
 
     public void disassignTask() {
         this.quantity=null;
@@ -107,17 +109,10 @@ public class Task {
             }
         });
     }
-    public static Task loadTaskById(int id_rep) {
 
-        String query="SELECT * FROM task WHERE id_recipe = "+id_rep;
-        final boolean[] exists = {false};
-        PersistenceManager.executeQuery(query, new ResultHandler() {
-            @Override
-            public void handle(ResultSet rs) throws SQLException {
-                exists[0] =true;
-            }
-        });
-        return  new Task(Recipe.loadRecipeById(20));
+
+    public void remove() {
+        String query = "DELETE FROM task WHERE id = "+this.id;
+        PersistenceManager.executeUpdate(query);
     }
-
 }

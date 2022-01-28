@@ -64,12 +64,23 @@ public class SummarySheet {
     }
 
     public void deleteTask(Task task) {
+        task.remove();
         this.taskList.remove(task);
     }
 
     public void modifyTask(Task task, ArrayList<Turn> tlList, String portion, Time duration, Cook cook)     throws SSException {
         task.modifyTask(task,tlList,portion,duration,cook);
 
+    }
+    public Task loadTaskById(int id) {
+        Task t = null;
+        int i=0;
+        for (i=0;i<this.taskList.size();i++){
+            if(this.taskList.get(i).getId()==id){
+                t=this.taskList.get(i);
+            }
+        }
+        return t;
     }
 
     public void disassignTask(Task task) {
@@ -117,28 +128,29 @@ public class SummarySheet {
             public void handle(ResultSet rs) throws SQLException {
                 ss.owner = User.loadUserById(rs.getInt("user"));
                 ss.serviceUsed = ServiceInfo.loadServiceById(rs.getInt("service_id"));
+
             }
         });
-        Menu m = ss.serviceUsed.getMenu();
+
         ss.taskList =new ArrayList<Task>();
-        ArrayList<Recipe> arrayListRecipe = m.getAllRecipe();
-        for(int i=0;i<arrayListRecipe.size();i++){
-            Task t = new Task(arrayListRecipe.get(i));
-            System.out.println(arrayListRecipe.get(i));
-            ss.taskList.add(t);
-        }
-        query = "SELECT id_recipe FROM task WHERE id_summarysheet = " + id;
+
+
+        query = "SELECT id,id_recipe,name_rec FROM task WHERE id_summarysheet = " + id;
         PersistenceManager.executeQuery(query, new ResultHandler() {
             @Override
             public void handle(ResultSet rs) throws SQLException {
                     Task t = new Task(Recipe.loadRecipeById(rs.getInt("id_recipe")));
                     if(!ss.taskList.contains(t)) {
+                        t.setId(rs.getInt("id"));
+                        System.out.println(rs.getString("name_rec"));
                         ss.taskList.add(t);
                     }
             }
         });
         return ss;
     }
+
+
 }
 
 
