@@ -49,7 +49,15 @@ public class SummarySheet {
     public ArrayList<Task> getTaskList(){return this.taskList;}
 
     public ArrayList<Task> sortTask(ArrayList<Task> newtl) {
-        this.taskList= newtl;/*TODO:non so cosa devo fare*/
+        int i=0;
+
+        for(i=this.taskList.size()-1;i>=0;i--){
+            deleteTask(this.taskList.get(i));
+        }
+        for(i=0;i< newtl.size();i++){
+            newtl.get(i).saveNewTaskInSS(newtl.get(i),this.id);
+        }
+        this.taskList= newtl;
         return taskList;
     }
 

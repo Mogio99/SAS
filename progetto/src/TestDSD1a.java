@@ -1,7 +1,6 @@
 import businesslogic.CatERing;
 import businesslogic.SSException;
 import businesslogic.UseCaseLogicException;
-import businesslogic.event.ServiceInfo;
 import businesslogic.task.SummarySheet;
 import businesslogic.task.kTaskManager;
 
