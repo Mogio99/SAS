@@ -1,19 +1,15 @@
 package businesslogic.task;
 import businesslogic.CatERing;
 import businesslogic.SSException;
-import businesslogic.disponibility.Cook;
 import businesslogic.event.ServiceInfo;
 import businesslogic.job.Job;
 import businesslogic.shift.ShiftBoard;
-import businesslogic.shift.Turn;
 import businesslogic.shift.TurnKitchen;
 import businesslogic.user.User;
 import businesslogic.UseCaseLogicException;
 import businesslogic.menu.Menu;
 import persistence.PersistenceTaskManager;
 
-import javax.sound.midi.SysexMessage;
-import java.rmi.server.SocketSecurityException;
 import java.sql.Time;
 import java.util.ArrayList;
 
@@ -119,13 +115,14 @@ public class kTaskManager {
 
     /*DSD 5 assigneTask per aggiunger dei lavori al foglio riepilogativo */
 
-    public void assigneTask(Task task, ArrayList<Turn> tlList, String portion, Time duration, Cook cook)
+    public void assigneTask(Task task, ArrayList<TurnKitchen> tlList, int portion, Time duration, User cook)
             throws UseCaseLogicException,SSException{
         User user = CatERing.getInstance().getUserManager().getCurrentUser();
         int i = 0;
         if(!user.isChef()){
             throw new UseCaseLogicException();
         }
+
         if(currentSS == null){
             throw new SSException();
         }
@@ -134,14 +131,16 @@ public class kTaskManager {
                 throw new SSException();
             }
         }
+        System.out.println("sono qua");
         if(!currentSS.contains(task)){
             throw new SSException();
         }
+
         currentSS.assigneTask(task,tlList,portion,duration,cook);
         this.notifyTaskAssigned(task);
     }
     /*DSD5a modifica*/
-    public void modifyTask(Task task, ArrayList<Turn> tlList, String portion, Time duration, Cook cook)
+    public void modifyTask(Task task, ArrayList<TurnKitchen> tlList, int portion, Time duration, User cook)
             throws UseCaseLogicException,SSException{
         User user = CatERing.getInstance().getUserManager().getCurrentUser();
         int i = 0;
@@ -151,9 +150,11 @@ public class kTaskManager {
         if(currentSS == null){
             throw new SSException();
         }
-        for(i=0;i< tlList.size();i++){
-            if(tlList.get(i).isSatured()){
-                throw new SSException();
+        if(tlList!=null) {
+            for (i = 0; i < tlList.size(); i++) {
+                if (tlList.get(i).isSatured()) {
+                    throw new SSException();
+                }
             }
         }
         if(!currentSS.contains(task)){
@@ -209,52 +210,55 @@ public class kTaskManager {
     }
     public SummarySheet getCurrentSS(){return this.currentSS;}
 
-    public void assigneTask(Task task, ArrayList<Turn> tlList) throws UseCaseLogicException, SSException {
-        assigneTask(task,tlList,null,null,null);
+    public void assigneTask(Task task, ArrayList<TurnKitchen> tlList) throws UseCaseLogicException, SSException {
+        assigneTask(task,tlList,0,null,null);
     }
-    public void assigneTask(Task task, ArrayList<Turn> tlList,Cook cook) throws UseCaseLogicException, SSException {
-        assigneTask(task,tlList,null,null,cook);
+    public void assigneTask(Task task, ArrayList<TurnKitchen> tlList,User cook) throws UseCaseLogicException, SSException {
+
+        assigneTask(task,tlList,0,null,cook);
     }
-    public void assigneTask(Task task, ArrayList<Turn> tlList,String portion) throws UseCaseLogicException, SSException {
+    public void assigneTask(Task task, ArrayList<TurnKitchen> tlList,int portion) throws UseCaseLogicException, SSException {
         assigneTask(task,tlList,portion,null,null);
     }
-    public void assigneTask(Task task, ArrayList<Turn> tlList,Time duration) throws UseCaseLogicException, SSException {
-        assigneTask(task,tlList,null,duration,null);
+    public void assigneTask(Task task, ArrayList<TurnKitchen> tlList,Time duration) throws UseCaseLogicException, SSException {
+        assigneTask(task,tlList,0,duration,null);
     }
-    public void assigneTask(Task task, ArrayList<Turn> tlList,Time duration,String portion) throws UseCaseLogicException, SSException {
+    public void assigneTask(Task task, ArrayList<TurnKitchen> tlList,Time duration,int portion) throws UseCaseLogicException, SSException {
         assigneTask(task,tlList,portion,duration,null);
     }
-    public void assigneTask(Task task, ArrayList<Turn> tlList,Time duration,Cook cook) throws UseCaseLogicException, SSException {
-        assigneTask(task,tlList,null,duration,cook);
+    public void assigneTask(Task task, ArrayList<TurnKitchen> tlList,Time duration,User cook) throws UseCaseLogicException, SSException {
+        assigneTask(task,tlList,0,duration,cook);
     }
-    public void assigneTask(Task task, ArrayList<Turn> tlList,Cook cook,String portion) throws UseCaseLogicException, SSException {
+    public void assigneTask(Task task, ArrayList<TurnKitchen> tlList,User cook,int portion) throws UseCaseLogicException, SSException {
         assigneTask(task,tlList,portion,null,cook);
     }
 
-    public void modifyTask(Task task) throws UseCaseLogicException, SSException {
-        modifyTask(task,null,null,null,null);
+
+    public void modifyTask(Task task, ArrayList<TurnKitchen> tlList) throws UseCaseLogicException, SSException {
+        modifyTask(task,tlList,0,null,null);
     }
-    public void modifyTask(Task task, ArrayList<Turn> tlList) throws UseCaseLogicException, SSException {
-        modifyTask(task,tlList,null,null,null);
-    }
-    public void modifyTask(Task task,String portion) throws UseCaseLogicException, SSException {
+    public void modifyTask(Task task,int portion) throws UseCaseLogicException, SSException {
         modifyTask(task,null,portion,null,null);
     }
-    public void modifyTask(Task task,Time duration) throws UseCaseLogicException, SSException {
-        modifyTask(task,null,null,duration,null);
+    public void modifyTask(Task task, Time duration, Time time3, int i) throws UseCaseLogicException, SSException {
+        modifyTask(task,null,0,duration,null);
     }
-    public void modifyTask(Task task, Cook cook) throws UseCaseLogicException, SSException {
-        modifyTask(task,null,null,null,cook);
+    public void modifyTask(Task task, User cook) throws UseCaseLogicException, SSException {
+        modifyTask(task,null,0,null,cook);
     }
-    public void modifyTask(Task task, ArrayList<Turn> tlList,Time duration,Cook cook) throws UseCaseLogicException, SSException {
-        modifyTask(task,tlList,null,duration,cook);
+    public void modifyTask(Task task, ArrayList<TurnKitchen> tlList,User cook,Time duration) throws UseCaseLogicException, SSException {
+        modifyTask(task,tlList,0,duration,cook);
     }
-    public void modifyTask(Task task, ArrayList<Turn> tlList,Cook cook,String portion) throws UseCaseLogicException, SSException {
+    public void modifyTask(Task task, ArrayList<TurnKitchen> tlList,User cook,int portion) throws UseCaseLogicException, SSException {
         modifyTask(task,tlList,portion,null,cook);
     }
-    public void modifyTask(Task task, ArrayList<Turn> tlList,Time duration,String portion) throws UseCaseLogicException, SSException {
+    public void modifyTask(Task task, ArrayList<TurnKitchen> tlList,Time duration,int portion) throws UseCaseLogicException, SSException {
         modifyTask(task,tlList,portion,duration,null);
     }
+    public void modifyTask(Task task,User cook,Time duration,int portion) throws UseCaseLogicException, SSException {
+        modifyTask(task,null,portion,duration,null);
+    }
+
 
 
     private void notifySSCreated(SummarySheet ss) {

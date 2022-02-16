@@ -1,14 +1,12 @@
 package businesslogic.task;
 import businesslogic.SSException;
-import businesslogic.disponibility.Cook;
 import businesslogic.event.ServiceInfo;
 import businesslogic.job.Job;
 import businesslogic.menu.Menu;
 import businesslogic.recipe.Recipe;
 import businesslogic.shift.Turn;
+import businesslogic.shift.TurnKitchen;
 import businesslogic.user.User;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import persistence.BatchUpdateHandler;
 import persistence.PersistenceManager;
 import persistence.ResultHandler;
@@ -50,7 +48,6 @@ public class SummarySheet {
 
     public ArrayList<Task> sortTask(ArrayList<Task> newtl) {
         int i=0;
-
         for(i=this.taskList.size()-1;i>=0;i--){
             deleteTask(this.taskList.get(i));
         }
@@ -65,10 +62,8 @@ public class SummarySheet {
         return taskList.contains(task);
     }
 
-    public void assigneTask(Task task, ArrayList<Turn> tlList, String portion, Time duration, Cook cook)
-    throws SSException {
+    public void assigneTask(Task task, ArrayList<TurnKitchen> tlList, int portion, Time duration, User cook) {
         task.assigneTask(task,tlList,portion,duration,cook);
-
     }
 
     public void deleteTask(Task task) {
@@ -76,7 +71,7 @@ public class SummarySheet {
         this.taskList.remove(task);
     }
 
-    public void modifyTask(Task task, ArrayList<Turn> tlList, String portion, Time duration, Cook cook)     throws SSException {
+    public void modifyTask(Task task, ArrayList<TurnKitchen> tlList, int portion, Time duration, User cook)     throws SSException {
         task.modifyTask(task,tlList,portion,duration,cook);
 
     }
@@ -143,16 +138,11 @@ public class SummarySheet {
         ss.taskList =new ArrayList<Task>();
 
 
-        query = "SELECT id,id_recipe,name_rec FROM task WHERE id_summarysheet = " + id;
+        query = "SELECT id FROM task WHERE id_summarysheet = " + id;
         PersistenceManager.executeQuery(query, new ResultHandler() {
             @Override
             public void handle(ResultSet rs) throws SQLException {
-                    Task t = new Task(Recipe.loadRecipeById(rs.getInt("id_recipe")));
-                    if(!ss.taskList.contains(t)) {
-                        t.setId(rs.getInt("id"));
-                        System.out.println(rs.getString("name_rec"));
-                        ss.taskList.add(t);
-                    }
+                        ss.taskList.add(Task.loadTaskById(rs.getInt("id")));
             }
         });
         return ss;

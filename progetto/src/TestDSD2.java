@@ -19,9 +19,6 @@ public class TestDSD2 {
         System.out.println("task presenti nella summary sheet 6:");
         taskMgr.loadSS(s);
 
-
-
-
         taskMgr.addTask(Recipe.loadRecipeById(20));
         taskMgr.addTask(Recipe.loadRecipeById(12));
         taskMgr.addTask(Recipe.loadRecipeById(2));

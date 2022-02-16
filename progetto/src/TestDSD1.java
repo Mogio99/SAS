@@ -7,8 +7,6 @@ import businesslogic.task.kTaskManager;
 
 public class TestDSD1 {
     public static void main(String[] args) throws UseCaseLogicException, SSException {
-        /* System.out.println("TEST DATABASE CONNECTION");
-        PersistenceManager.testSQLConnection();*/
         CatERing.getInstance().getUserManager().fakeLogin("Lidia");
         System.out.println(CatERing.getInstance().getUserManager().getCurrentUser());
         System.out.println("TEST CREATESS");

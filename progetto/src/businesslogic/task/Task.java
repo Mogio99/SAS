@@ -1,12 +1,10 @@
 package businesslogic.task;
 import businesslogic.SSException;
-import businesslogic.disponibility.Cook;
 import businesslogic.job.Job;
-import businesslogic.menu.Menu;
-import businesslogic.menu.MenuItem;
 import businesslogic.recipe.Recipe;
 import businesslogic.shift.Turn;
 import businesslogic.shift.TurnKitchen;
+import businesslogic.user.User;
 import persistence.BatchUpdateHandler;
 import persistence.PersistenceManager;
 import persistence.ResultHandler;
@@ -20,11 +18,11 @@ import java.util.ArrayList;
 public class Task {
     private int idRecipe;
     private int id;
-    private String quantity;
+    private int quantity;
     private Time time;
     private boolean done;
-    private Cook cook;
-    private ArrayList<Turn> turnList;
+    private User cook;
+    private ArrayList<TurnKitchen> turnList;
     private Job consistingJob;
 
     public Task(Job rec) {
@@ -33,53 +31,64 @@ public class Task {
         turnList = new ArrayList<>();
     }
 
+    public Task() {
+        turnList = new ArrayList<>();
+    }
+
     public int getIdRecipe(){
         return this.idRecipe;
     }
-    public void assigneTask(Task task, ArrayList<Turn> tlList, String portion, Time duration, Cook cook) throws SSException {
-        if(portion!=null){
-            this.quantity=portion;
+    public void assigneTask(Task task, ArrayList<TurnKitchen> tlList, int portion, Time duration, User cook){
+        if(quantity!=0) {
+            this.quantity = portion;
         }
+
         if(duration!=null){
             this.time=duration;
         }
         if(cook!=null){
-            if(cook.isAvaible(turnList)){
+            if(cook.isAvailable(turnList)){
                 this.cook=cook;
             }
-        }else{
-            throw new SSException();
         }
-        //TODO:aggiungere if in caso
-
+        if(tlList!=null){
+            this.turnList = tlList;
+            saveListOnTask(task,tlList);
+        }
+        saveTaskModified(task);
     }
 
-    public void modifyTask(Task task, ArrayList<Turn> tlList, String portion, Time duration, Cook cook) throws SSException{
-        if(portion!=null){
-            this.quantity=portion;
+
+    public void modifyTask(Task task, ArrayList<TurnKitchen> tlList, int  portion, Time duration, User cook) throws SSException{
+        if(portion!=0) {
+            this.quantity = portion;
         }
         if(duration!=null){
             this.time=duration;
         }
         if(cook!=null){
-            if(cook.isAvaible(task.turnList)){
+            if(cook.isAvailable(task.turnList)){
                 this.cook=cook;
+            }else{
+                throw new SSException();
             }
-        }else{
-            throw new SSException();
         }
         if(tlList!=null){
             task.turnList.clear();
             for(int i=0;i<tlList.size();i++){
                 task.turnList.add((TurnKitchen) tlList.get(i));
             }
+            saveListOnTask(task,tlList);
         }
+        saveTaskModified(task);
     }
+
+
     public void setId(int id){this.id=id;}
     public int getId(){return this.id;}
 
     public void disassignTask() {
-        this.quantity=null;
+        this.quantity=0;
         this.time=null;
         this.cook=null;
         this.turnList.clear();
@@ -89,6 +98,7 @@ public class Task {
     public void done() {
         this.done=true;
     }
+
     /*PERSISTANCE*/
     public void saveNewTaskInSS(Task task, int id) {
         String name_rec = task.consistingJob.toString();
@@ -109,10 +119,66 @@ public class Task {
             }
         });
     }
+    public static Task loadTaskById(int id){
+        String query ="SELECT * from task WHERE id="+id+";";
+        ArrayList<Integer> list= new ArrayList<Integer>();
+        Task t=new Task();
+        PersistenceManager.executeQuery(query, new ResultHandler() {
+            @Override
+            public void handle(ResultSet rs) throws SQLException {
+                t.id=rs.getInt("id");
+                t.idRecipe=rs.getInt("id_recipe");
+                t.consistingJob=Recipe.loadRecipeById(rs.getInt("id_recipe"));
+                t.quantity=rs.getInt("quantity");
+                t.cook=User.loadUserById(rs.getInt("cook_id"));
+                t.time=rs.getTime("time");
+                t.done=rs.getBoolean("done");
 
+                String query="SELECT * FROM catering.turn_list WHERE task_id="+t.id;
+                PersistenceManager.executeQuery(query, new ResultHandler() {
+                    @Override
+                    public void handle(ResultSet rs) throws SQLException {
+                        list.add(rs.getInt("turn_id"));
+                    }
+                });
+
+            }
+        });
+        for(int i=0;i<list.size();i++) {
+            t.turnList.add(TurnKitchen.loadKitchenTurnById(list.get(i)));
+        }
+
+        return t;
+    }
 
     public void remove() {
         String query = "DELETE FROM task WHERE id = "+this.id;
+        PersistenceManager.executeUpdate(query);
+    }
+
+
+    private void saveListOnTask(Task task, ArrayList<TurnKitchen> tlList) {
+        String paramQuery = "INSERT INTO turn_list (turn_id, task_id) values (?, ?)";
+        PersistenceManager.executeBatchUpdate(paramQuery, tlList.size(), new BatchUpdateHandler() {
+            @Override
+            public void handleBatchItem(PreparedStatement ps, int batchCount) throws SQLException {
+                ps.setInt(1, tlList.get(batchCount).getId());
+                ps.setInt(2, task.getId());
+            }
+
+            @Override
+            public void handleGeneratedIds(ResultSet rs, int count) throws SQLException {
+            }
+        });
+    }
+
+    private void saveTaskModified(Task task) {
+        String time = task.time == null ? null : "'" + task.time + "'";
+        String query = "UPDATE task SET quantity=" + task.quantity +
+                ", time=" + time +
+                ", cook_id=" + task.cook.getId() +
+                ", id_recipe=" + task.consistingJob.getId() +
+                " WHERE id=" + task.getId() + "; ";
         PersistenceManager.executeUpdate(query);
     }
 }

@@ -1,15 +1,14 @@
 package businesslogic.user;
 
+import businesslogic.shift.TurnKitchen;
 import javafx.collections.FXCollections;
 import persistence.PersistenceManager;
 import persistence.ResultHandler;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
+import java.sql.Time;
+import java.util.*;
 
 public class User {
 
@@ -17,6 +16,10 @@ public class User {
 
     public boolean isOwner(User user) {
         return true; //TODO: devo aggiungere qualcosa in futuro
+    }
+
+    public boolean isAvailable(ArrayList<TurnKitchen> turnList){
+        return true;
     }
 
     public static enum Role {SERVIZIO, CUOCO, CHEF, ORGANIZZATORE};
