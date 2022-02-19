@@ -265,7 +265,6 @@ public class kTaskManager {
         for(KTaskEventReceiver kitchenTaskER : eventReceivers){
             kitchenTaskER.updateSSCreated(ss);
         }
-
     }
     private void notifyTaskAdded(Task t) {
         for(KTaskEventReceiver kitchenTaskER: this.eventReceivers){

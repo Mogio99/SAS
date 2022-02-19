@@ -10,6 +10,7 @@ public class TurnKitchen extends Turn {
     boolean saturation=false;
     public void setSaturation(boolean val) {
         saturation = val;
+        saveKitchenTurnSat();
     }
     public boolean isSaturated() {
         return saturation;
@@ -38,8 +39,8 @@ public class TurnKitchen extends Turn {
     }
 
 
-    public static void saveKitchenTurnSat(TurnKitchen kt) {
-        String query = "UPDATE catering.Turns SET saturation = " + (kt.isSaturated() ? 1 : 0) + " WHERE id=" + kt.getId() + ";";
+    public void saveKitchenTurnSat() {
+        String query = "UPDATE turn SET saturation = " + (this.isSaturated() ? 1 : 0) + " WHERE turn_id=" + this.getId() + ";";
 
         PersistenceManager.executeUpdate(query);
     }

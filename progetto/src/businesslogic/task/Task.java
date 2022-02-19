@@ -2,13 +2,11 @@ package businesslogic.task;
 import businesslogic.SSException;
 import businesslogic.job.Job;
 import businesslogic.recipe.Recipe;
-import businesslogic.shift.Turn;
 import businesslogic.shift.TurnKitchen;
 import businesslogic.user.User;
 import persistence.BatchUpdateHandler;
 import persistence.PersistenceManager;
 import persistence.ResultHandler;
-
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -93,12 +91,27 @@ public class Task {
         this.cook=null;
         this.turnList.clear();
         this.done=false;
+        try {
+            modifyTask(this, null, 0, null, null);
+        }catch (SSException e) {
+            e.printStackTrace();
+        }
     }
 
     public void done() {
         this.done=true;
-    }
+        String query = "UPDATE task SET done=" + true +" WHERE id=" + this.getId() + ";";
+        PersistenceManager.executeUpdate(query);
 
+    }
+    public String toString(){
+        return "Task_id= "+this.id+"\n"+
+                "Recipe= "+consistingJob.toString()+"\n"+
+                "Cook= "+this.cook +"\n"+
+                "Quantity= "+this.quantity+"\n"+
+                "Time = "+ this.time +"\n"+
+                "Done ="+ this.done + "\n";
+    }
     /*PERSISTANCE*/
     public void saveNewTaskInSS(Task task, int id) {
         String name_rec = task.consistingJob.toString();
@@ -174,11 +187,20 @@ public class Task {
 
     private void saveTaskModified(Task task) {
         String time = task.time == null ? null : "'" + task.time + "'";
-        String query = "UPDATE task SET quantity=" + task.quantity +
-                ", time=" + time +
-                ", cook_id=" + task.cook.getId() +
-                ", id_recipe=" + task.consistingJob.getId() +
-                " WHERE id=" + task.getId() + "; ";
-        PersistenceManager.executeUpdate(query);
+        if(this.cook!=null) {
+            String query = "UPDATE task SET quantity=" + task.quantity +
+                    ", time=" + time +
+                    ", cook_id=" + task.cook.getId() +
+                    ", id_recipe=" + task.consistingJob.getId() +
+                    " WHERE id=" + task.getId() + "; ";
+            PersistenceManager.executeUpdate(query);
+        }else{
+            String query = "UPDATE task SET quantity=" + task.quantity +
+                    ", time=" + time +
+                    ", cook_id=" + null +
+                    ", id_recipe=" + task.consistingJob.getId() +
+                    " WHERE id=" + task.getId() + "; ";
+            PersistenceManager.executeUpdate(query);
+        }
     }
 }

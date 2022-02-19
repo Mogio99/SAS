@@ -1,3 +1,5 @@
+package TestKitchen;
+
 import businesslogic.CatERing;
 import businesslogic.SSException;
 import businesslogic.UseCaseLogicException;
@@ -20,7 +22,7 @@ public class TestDSD5a {
         System.out.println(CatERing.getInstance().getUserManager().getCurrentUser());
         SummarySheet s = SummarySheet.loadSSId(23);
         kTaskManager taskMgr = CatERing.getInstance().getTaskManager();
-        System.out.println("ASSIGNE TASK");
+        System.out.println("MODIFY TASK");
         Task t1 = s.getTaskList().get(2);
         Task t2 = s.getTaskList().get(1);
         long time = 200000;
@@ -34,7 +36,7 @@ public class TestDSD5a {
         } catch (SSException e) {
             e.printStackTrace();
         }
-
-
+        System.out.println(t1.toString());
+        System.out.println(t2.toString());
     }
 }

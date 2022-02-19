@@ -1,18 +1,19 @@
+package TestKitchen;
+
 import businesslogic.CatERing;
 import businesslogic.SSException;
 import businesslogic.UseCaseLogicException;
-import businesslogic.event.ServiceInfo;
 import businesslogic.task.SummarySheet;
 import businesslogic.task.kTaskManager;
 
-public class TestDSD1 {
+public class TestDSD1a {
     public static void main(String[] args) throws UseCaseLogicException, SSException {
         CatERing.getInstance().getUserManager().fakeLogin("Lidia");
         System.out.println(CatERing.getInstance().getUserManager().getCurrentUser());
-        System.out.println("TEST CREATESS");
-        ServiceInfo s = ServiceInfo.loadServiceById(4);
         kTaskManager taskMgr = CatERing.getInstance().getTaskManager();
-        SummarySheet ss = taskMgr.createSS(s);
-        System.out.println("TEST END");
+        SummarySheet ss = SummarySheet.loadSSId(24);
+        taskMgr.loadSS(ss);
+        System.out.println(taskMgr.getCurrentSS().getServiceName());
+        System.out.println(taskMgr.getCurrentSS().getId());
     }
 }

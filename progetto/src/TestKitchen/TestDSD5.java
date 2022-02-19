@@ -1,3 +1,5 @@
+package TestKitchen;
+
 import businesslogic.CatERing;
 import businesslogic.SSException;
 import businesslogic.UseCaseLogicException;
