@@ -15,6 +15,7 @@ public class TestDSD1 {
         ServiceInfo s = ServiceInfo.loadServiceById(4);
         kTaskManager taskMgr = CatERing.getInstance().getTaskManager();
         SummarySheet ss = taskMgr.createSS(s);
+        System.out.println(ss.toString());
         System.out.println("TEST END");
     }
 }

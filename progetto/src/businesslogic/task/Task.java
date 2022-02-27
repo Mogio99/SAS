@@ -28,14 +28,15 @@ public class Task {
         this.idRecipe = rec.getId();
         turnList = new ArrayList<>();
     }
-
     public Task() {
         turnList = new ArrayList<>();
     }
-
+    public void setId(int id){this.id=id;}
+    public int getId(){return this.id;}
     public int getIdRecipe(){
         return this.idRecipe;
     }
+
     public void assigneTask(Task task, ArrayList<TurnKitchen> tlList, int portion, Time duration, User cook){
         if(quantity!=0) {
             this.quantity = portion;
@@ -80,10 +81,6 @@ public class Task {
         }
         saveTaskModified(task);
     }
-
-
-    public void setId(int id){this.id=id;}
-    public int getId(){return this.id;}
 
     public void disassignTask() {
         this.quantity=0;
@@ -187,20 +184,20 @@ public class Task {
 
     private void saveTaskModified(Task task) {
         String time = task.time == null ? null : "'" + task.time + "'";
+        String query;
         if(this.cook!=null) {
-            String query = "UPDATE task SET quantity=" + task.quantity +
+            query = "UPDATE task SET quantity=" + task.quantity +
                     ", time=" + time +
                     ", cook_id=" + task.cook.getId() +
                     ", id_recipe=" + task.consistingJob.getId() +
                     " WHERE id=" + task.getId() + "; ";
-            PersistenceManager.executeUpdate(query);
         }else{
-            String query = "UPDATE task SET quantity=" + task.quantity +
+            query = "UPDATE task SET quantity=" + task.quantity +
                     ", time=" + time +
                     ", cook_id=" + null +
                     ", id_recipe=" + task.consistingJob.getId() +
                     " WHERE id=" + task.getId() + "; ";
-            PersistenceManager.executeUpdate(query);
         }
+        PersistenceManager.executeUpdate(query);
     }
 }

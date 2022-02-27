@@ -5,16 +5,20 @@ import businesslogic.event.ServiceInfo;
 import businesslogic.menu.Menu;
 import businesslogic.menu.Section;
 import businesslogic.recipe.Recipe;
+import javafx.beans.Observable;
 import javafx.collections.ObservableList;
+import persistence.PersistenceManager;
 
 import java.util.Arrays;
 import java.util.Map;
+import java.util.Observer;
+import java.util.Random;
 
 public class TestCatERing {
-    public static void main(String[] args) {
-        try {
-            /* System.out.println("TEST DATABASE CONNECTION");
-            PersistenceManager.testSQLConnection();*/
+    public void main(String[] args) {
+       try {
+            System.out.println("TEST DATABASE CONNECTION");
+            PersistenceManager.testSQLConnection();
             System.out.println("TEST FAKE LOGIN");
             CatERing.getInstance().getUserManager().fakeLogin("Lidia");
             System.out.println(CatERing.getInstance().getUserManager().getCurrentUser());

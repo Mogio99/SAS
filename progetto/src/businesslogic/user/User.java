@@ -11,6 +11,9 @@ import java.sql.Time;
 import java.util.*;
 
 public class User {
+    private int id;
+    private String username;
+    private Set<Role> roles;
 
     private static Map<Integer, User> loadedUsers = FXCollections.observableHashMap();
 
@@ -23,10 +26,6 @@ public class User {
     }
 
     public static enum Role {SERVIZIO, CUOCO, CHEF, ORGANIZZATORE};
-
-    private int id;
-    private String username;
-    private Set<Role> roles;
 
     public User() {
         id = 0;

@@ -3,17 +3,14 @@ package businesslogic.shift;
 import java.util.Date;
 
 public class Turn {
-    boolean satured=false;
+
     private int id;
     private Date startDate;
     private Date endDate;
     private Date deadline;
-    private String location;    public Turn(){
+    private String location;
+    public Turn(){}
 
-    }
-    public boolean isSatured() {
-        return this.satured;
-    }
     public void setId(int id) {
         this.id=id;
     }

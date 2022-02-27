@@ -20,7 +20,7 @@ public class TestDSD5 {
         tl1.add(TurnKitchen.loadKitchenTurnById(2));
         tl1.add(TurnKitchen.loadKitchenTurnById(3));
         System.out.println(CatERing.getInstance().getUserManager().getCurrentUser());
-        SummarySheet s = SummarySheet.loadSSId(25);
+        SummarySheet s = SummarySheet.loadSSId(26);
         kTaskManager taskMgr = CatERing.getInstance().getTaskManager();
         System.out.println("ASSIGNE TASK");
         taskMgr.loadSS(s);
@@ -29,7 +29,7 @@ public class TestDSD5 {
             taskMgr.assigneTask(t1, tl1, User.loadUser("Paola"));
             System.out.println(t1);
         }catch(Exception e){
-            System.out.println(e);
+            System.out.println("Errore nel test "+e);
         }
     }
 

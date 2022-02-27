@@ -4,7 +4,6 @@ import businesslogic.event.ServiceInfo;
 import businesslogic.job.Job;
 import businesslogic.menu.Menu;
 import businesslogic.recipe.Recipe;
-import businesslogic.shift.Turn;
 import businesslogic.shift.TurnKitchen;
 import businesslogic.user.User;
 import persistence.BatchUpdateHandler;
@@ -13,12 +12,14 @@ import persistence.ResultHandler;
 
 import java.sql.*;
 import java.util.ArrayList;
-
+/*a mio parere nel caso di utilizzo di summarysheet stiamo utilizzando un pattern singleton, perché ci può essere
+* una singola istanza di questo oggetto*/
 public class SummarySheet {
     private ArrayList<Task> taskList;
     private User owner;
     private ServiceInfo serviceUsed;
     private int id;
+    private static SummarySheet instance;
 
     public SummarySheet(ServiceInfo s, User user, Menu menu) {
         this.owner = user;
@@ -40,8 +41,8 @@ public class SummarySheet {
         this.taskList.add(turn);
         turn.saveNewTaskInSS(turn,this.id);
         return turn;
-    }
 
+    }
 
 
     public ArrayList<Task> getTaskList(){return this.taskList;}
@@ -96,6 +97,16 @@ public class SummarySheet {
     public String getServiceName(){return this.serviceUsed.getName();}
     public int getId(){return this.id;}
 
+
+    public String toString(){
+
+        return "User= "+ this.owner.getUserName() + "\n"+
+                "Service info= "+this.serviceUsed.getName()+"\n"+
+                "ID summary sheet= "+this.id+"\n";
+    }
+
+
+    /*PERSISTANCE*/
     public static void saveNewSS(SummarySheet ss) {
             String ssInsert = "INSERT INTO catering.SummarySheet(user, service_id,service_name) VALUES (?, ?,?);";
             int[] result = PersistenceManager.executeBatchUpdate(ssInsert, 1, new BatchUpdateHandler() {
@@ -134,10 +145,7 @@ public class SummarySheet {
 
             }
         });
-
         ss.taskList =new ArrayList<Task>();
-
-
         query = "SELECT id FROM task WHERE id_summarysheet = " + id;
         PersistenceManager.executeQuery(query, new ResultHandler() {
             @Override

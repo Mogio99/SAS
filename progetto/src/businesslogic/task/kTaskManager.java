@@ -21,6 +21,9 @@ public class kTaskManager {
     public kTaskManager(){
         eventReceivers = new ArrayList<>();
     }
+    public void setCurrent(SummarySheet ss) {
+        this.currentSS = ss;
+    }
 
     /*DSD1 creazione del summary sheet*/
     public SummarySheet createSS(ServiceInfo s) throws UseCaseLogicException, SSException {
@@ -51,9 +54,7 @@ public class kTaskManager {
         this.setCurrent(ss);
         return currentSS;
     }
-    public void setCurrent(SummarySheet ss) {
-        this.currentSS = ss;
-    }
+
 
     /*DSD2 aggiunta di lavori*/
     public Task addTask(Job job) throws UseCaseLogicException,SSException{
@@ -106,7 +107,7 @@ public class kTaskManager {
     */
     public ShiftBoard getShiftBoard() throws UseCaseLogicException{
         User user = CatERing.getInstance().getUserManager().getCurrentUser();
-        if(user.isChef()==false){
+        if(!user.isChef()){
             throw new UseCaseLogicException();
         }
         ShiftBoard shiftBoard  = CatERing.getInstance().getTurnManager().getShiftBoard();
@@ -126,12 +127,14 @@ public class kTaskManager {
         if(currentSS == null){
             throw new SSException();
         }
+
         for(i=0;i< tlList.size();i++){
-            if(tlList.get(i).isSatured()){
+            if(tlList.get(i).isSaturated()){
+                System.out.println("Turn "+tlList.get(i).getId()+
+                        " è saturo non si possono eseguire operazioni");
                 throw new SSException();
             }
         }
-        System.out.println("sono qua");
         if(!currentSS.contains(task)){
             throw new SSException();
         }
@@ -152,7 +155,7 @@ public class kTaskManager {
         }
         if(tlList!=null) {
             for (i = 0; i < tlList.size(); i++) {
-                if (tlList.get(i).isSatured()) {
+                if (tlList.get(i).isSaturated()) {
                     throw new SSException();
                 }
             }
@@ -201,9 +204,6 @@ public class kTaskManager {
         User user = CatERing.getInstance().getUserManager().getCurrentUser();
         if(!user.isChef()){
             throw new UseCaseLogicException();
-        }
-        if(currentSS == null){
-            throw new SSException();
         }
         kitchenTurn.setSaturation(val);
         this.notifyKitTurnSat(kitchenTurn);
