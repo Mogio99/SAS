@@ -20,7 +20,7 @@ public class TestDSD5a {
         tl1.add(TurnKitchen.loadKitchenTurnById(2));
         tl1.add(TurnKitchen.loadKitchenTurnById(3));
         System.out.println(CatERing.getInstance().getUserManager().getCurrentUser());
-        SummarySheet s = SummarySheet.loadSSId(23);
+        SummarySheet s = SummarySheet.loadSSId(26);
         kTaskManager taskMgr = CatERing.getInstance().getTaskManager();
         System.out.println("MODIFY TASK");
         Task t1 = s.getTaskList().get(2);
@@ -38,5 +38,7 @@ public class TestDSD5a {
         }
         System.out.println(t1.toString());
         System.out.println(t2.toString());
+        System.out.println("TEMINE TEST DSD5.a ");
     }
+
 }

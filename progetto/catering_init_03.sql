@@ -285,21 +285,58 @@ UNLOCK TABLES;
 -- Dump completed on 2020-06-05 15:04:25
 
 /*creazione della tabella task*/
-create table task
-(
-    id_recipe       int          null,
-    id_summarysheet int          null,
-    id              int auto_increment
-        primary key,
-    name_rec        varchar(128) not null
-);
-
-/*creazione della tabella summarysheet*/
 create table summarysheet
 (
     id           int auto_increment
         primary key,
     user         int          not null,
     service_id   int          not null,
-    service_name varchar(128) not null
+    service_name varchar(110) not null
 );
+
+create table task
+(
+    id_recipe       int                  null,
+    id_summarysheet int                  null,
+    id              int auto_increment
+        primary key,
+    name_rec        varchar(128)         not null,
+    quantity        int        default 0 null,
+    cook_id         int                  null,
+    time            time                 null,
+    done            tinyint(1) default 0 null
+);
+
+create table turn
+(
+    turn_id    int auto_increment
+        primary key,
+    type       char default 'k' not null,
+    start_date datetime         not null,
+    end_date   datetime         not null,
+    saturation tinyint(1)       not null
+);
+
+create table turn_list
+(
+    task_id int null,
+    turn_id int null
+);
+
+/*Popolazione delle tabelle per test*/
+/*riempimento Task*/
+INSERT INTO task VALUE (13,26,208,'Biscotti',0,0,null,0),
+(14,26,209,'Lingue di gatto',0,0,null,0),
+(15,26,210,'Bigné alla crema',0,7,null,0),
+(15,26,211,'Bigné al caffè',0,0,null,0),
+(16,26,212,'Pizzette',0,0,null,0),
+(9,26,213,'Croissant al prosciutto crudo mignon',0,0,null,0),
+(17,26,214,'Tramezzini tonno e carciofini mignon',0,0,null,0);
+
+/*Riempimento Turn*/
+INSERT INTO turn VALUE (1,'k','2022-02-25 14:00:00','2021-12-25 16:00:00',0),
+(2,'k','2022-02-15 18:00:00','2021-10-15 20:00:00',0),
+(3,'k','2022-03-20 13:00:00','2021-12-25 17:00:00',0);
+
+/*Riempimento summary sheey*/
+INSERT INTO summarysheet VALUE(26,2,4,'Coffee break pomeriggio');

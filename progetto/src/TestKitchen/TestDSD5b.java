@@ -33,5 +33,6 @@ public class TestDSD5b {
         } catch (SSException e) {
             e.printStackTrace();
         }
+        System.out.println("TEMINE TEST DSD5.b");
     }
 }

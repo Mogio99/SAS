@@ -28,7 +28,6 @@ public class SummarySheet {
         taskList = new ArrayList<Task>();
         int i = 0;
         for(i=0;i<arrayListRecipe.size();i++){
-            System.out.println(arrayListRecipe.get(i));
             Task task = new Task(arrayListRecipe.get(i));
             taskList.add(task);
         }
@@ -76,17 +75,6 @@ public class SummarySheet {
         task.modifyTask(task,tlList,portion,duration,cook);
 
     }
-    public Task loadTaskById(int id) {
-        Task t = null;
-        int i=0;
-        for (i=0;i<this.taskList.size();i++){
-            if(this.taskList.get(i).getId()==id){
-                t=this.taskList.get(i);
-            }
-        }
-        return t;
-    }
-
     public void disassignTask(Task task) {
         task.disassignTask();
     }
@@ -97,7 +85,11 @@ public class SummarySheet {
     public String getServiceName(){return this.serviceUsed.getName();}
     public int getId(){return this.id;}
 
-
+    public void stampTask(){
+        for (Task t:taskList) {
+            System.out.println(Recipe.loadRecipeById(t.getIdRecipe()));
+        }
+    }
     public String toString(){
 
         return "User= "+ this.owner.getUserName() + "\n"+

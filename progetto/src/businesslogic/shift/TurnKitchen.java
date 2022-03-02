@@ -16,6 +16,7 @@ public class TurnKitchen extends Turn {
         return saturation;
     }
 
+
     public void setSaturated(boolean saturated) {
         this.saturation = saturated;
     }

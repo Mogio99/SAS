@@ -13,14 +13,10 @@ import java.util.ArrayList;
 public class TestDSD5c {
     public static void main(String [] args) {
         CatERing.getInstance().getUserManager().fakeLogin("Lidia");
-        ArrayList<TurnKitchen> tl1 = new ArrayList<TurnKitchen>();
-        tl1.add(TurnKitchen.loadKitchenTurnById(1));
-        tl1.add(TurnKitchen.loadKitchenTurnById(2));
-        tl1.add(TurnKitchen.loadKitchenTurnById(3));
         System.out.println(CatERing.getInstance().getUserManager().getCurrentUser());
-        SummarySheet s = SummarySheet.loadSSId(23);
+        SummarySheet s = SummarySheet.loadSSId(26);
         kTaskManager taskMgr = CatERing.getInstance().getTaskManager();
-        System.out.println("DONE TASK");
+        System.out.println("TEST DONE TASK");
         try{
             Task t1 = s.getTaskList().get(1);
             System.out.println("PRIMA DI DONE \n"+t1.toString());
@@ -32,5 +28,6 @@ public class TestDSD5c {
         } catch (SSException e) {
             e.printStackTrace();
         }
+        System.out.println("TEMINE TEST DSD5.c");
     }
 }

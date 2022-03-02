@@ -25,12 +25,18 @@ public class TestDSD5 {
         System.out.println("ASSIGNE TASK");
         taskMgr.loadSS(s);
         Task t1=s.getTaskList().get(2);
+        Task t2=s.getTaskList().get(1);
         try {
             taskMgr.assigneTask(t1, tl1, User.loadUser("Paola"));
             System.out.println(t1);
+
+            taskMgr.assigneTask(t2, tl1 ,User.loadUser("Antonietta"),20);
+            System.out.println(t2);
+
         }catch(Exception e){
             System.out.println("Errore nel test "+e);
         }
+        System.out.println("TEMINE TEST DSD5");
     }
 
 

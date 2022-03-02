@@ -38,10 +38,10 @@ public class Task {
     }
 
     public void assigneTask(Task task, ArrayList<TurnKitchen> tlList, int portion, Time duration, User cook){
-        if(quantity!=0) {
+        if(portion!=0) {
+
             this.quantity = portion;
         }
-
         if(duration!=null){
             this.time=duration;
         }
@@ -52,6 +52,7 @@ public class Task {
         }
         if(tlList!=null){
             this.turnList = tlList;
+
             saveListOnTask(task,tlList);
         }
         saveTaskModified(task);
@@ -108,6 +109,10 @@ public class Task {
                 "Quantity= "+this.quantity+"\n"+
                 "Time = "+ this.time +"\n"+
                 "Done ="+ this.done + "\n";
+    }
+    public void stampListTurn(){
+            System.out.println(turnList.size());
+
     }
     /*PERSISTANCE*/
     public void saveNewTaskInSS(Task task, int id) {
@@ -189,12 +194,14 @@ public class Task {
             query = "UPDATE task SET quantity=" + task.quantity +
                     ", time=" + time +
                     ", cook_id=" + task.cook.getId() +
+                    ", quantity="+ task.quantity+
                     ", id_recipe=" + task.consistingJob.getId() +
                     " WHERE id=" + task.getId() + "; ";
         }else{
             query = "UPDATE task SET quantity=" + task.quantity +
                     ", time=" + time +
                     ", cook_id=" + null +
+                    ", quantity="+ task.quantity+
                     ", id_recipe=" + task.consistingJob.getId() +
                     " WHERE id=" + task.getId() + "; ";
         }

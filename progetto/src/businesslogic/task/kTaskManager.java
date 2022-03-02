@@ -119,7 +119,7 @@ public class kTaskManager {
     public void assigneTask(Task task, ArrayList<TurnKitchen> tlList, int portion, Time duration, User cook)
             throws UseCaseLogicException,SSException{
         User user = CatERing.getInstance().getUserManager().getCurrentUser();
-        int i = 0;
+
         if(!user.isChef()){
             throw new UseCaseLogicException();
         }
@@ -128,7 +128,7 @@ public class kTaskManager {
             throw new SSException();
         }
 
-        for(i=0;i< tlList.size();i++){
+        for(int i=0;i< tlList.size();i++){
             if(tlList.get(i).isSaturated()){
                 System.out.println("Turn "+tlList.get(i).getId()+
                         " è saturo non si possono eseguire operazioni");
@@ -136,9 +136,9 @@ public class kTaskManager {
             }
         }
         if(!currentSS.contains(task)){
+            System.out.println("task da aggiungere presente, impossibile aggiungere");
             throw new SSException();
         }
-
         currentSS.assigneTask(task,tlList,portion,duration,cook);
         this.notifyTaskAssigned(task);
     }
@@ -232,7 +232,6 @@ public class kTaskManager {
     public void assigneTask(Task task, ArrayList<TurnKitchen> tlList,User cook,int portion) throws UseCaseLogicException, SSException {
         assigneTask(task,tlList,portion,null,cook);
     }
-
 
     public void modifyTask(Task task, ArrayList<TurnKitchen> tlList) throws UseCaseLogicException, SSException {
         modifyTask(task,tlList,0,null,null);

@@ -13,7 +13,7 @@ public class TestDSD3 {
     public static void main (String [] args) throws UseCaseLogicException, SSException {
         CatERing.getInstance().getUserManager().fakeLogin("Lidia");
         System.out.println(CatERing.getInstance().getUserManager().getCurrentUser());
-        SummarySheet s = SummarySheet.loadSSId(25);
+        SummarySheet s = SummarySheet.loadSSId(26);
         kTaskManager taskMgr = CatERing.getInstance().getTaskManager();
         System.out.println("SORT TASK");
         taskMgr.loadSS(s);
@@ -27,7 +27,7 @@ public class TestDSD3 {
         newtl.add(extl.get(3));
         newtl.add(extl.get(5));
         taskMgr.sortTask(newtl);
-        SummarySheet.loadSSId(25);
-
+        SummarySheet.loadSSId(26);
+        System.out.println("TEMINE TEST DSD3");
     }
 }
