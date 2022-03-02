@@ -117,13 +117,18 @@ public class Task {
     /*PERSISTANCE*/
     public void saveNewTaskInSS(Task task, int id) {
         String name_rec = task.consistingJob.toString();
-        String query = "INSERT INTO task (id_recipe,id_summarysheet,name_rec) VALUES (?, ?,?);";
+        String query = "INSERT INTO task (id_recipe,id_summarysheet,name_rec,quantity" +
+                    ",cook_id,time,done) VALUES (?, ?,?,?,?,?,?);";
         int[] result = PersistenceManager.executeBatchUpdate(query, 1, new BatchUpdateHandler() {
             @Override
             public void handleBatchItem(PreparedStatement ps, int batchCount) throws SQLException {
                 ps.setInt(1,task.getIdRecipe());
                 ps.setInt(2, id);
                 ps.setString(3,name_rec);
+                ps.setInt(4,quantity);
+                ps.setInt(5,cook.getId());
+                ps.setTime(6,time);
+                ps.setBoolean(7,done);
             }
 
             @Override

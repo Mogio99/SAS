@@ -15,12 +15,12 @@ public class TestDSD3 {
         System.out.println(CatERing.getInstance().getUserManager().getCurrentUser());
         SummarySheet s = SummarySheet.loadSSId(26);
         kTaskManager taskMgr = CatERing.getInstance().getTaskManager();
-        System.out.println("SORT TASK");
+        System.out.println("TEST SORT TASK");
         taskMgr.loadSS(s);
         ArrayList<Task> newtl= new ArrayList<>();
         ArrayList<Task> extl = s.getTaskList();
-        newtl.add(extl.get(0));
         newtl.add(extl.get(1));
+        newtl.add(extl.get(0));
         newtl.add(extl.get(2));
         newtl.add(extl.get(4));
         newtl.add(extl.get(6));
