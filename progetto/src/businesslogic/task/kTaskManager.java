@@ -32,23 +32,24 @@ public class kTaskManager {
             throw new UseCaseLogicException();
         }
         Menu menu=s.getMenu();
-        if(!menu.isOwner(user)){
+      /*  if(!menu.isOwner(user)){
             throw new SSException();
-        }
+        }*/
         SummarySheet ss = new SummarySheet(s,user,menu);
-
         this.setCurrent(ss);
         this.notifySSCreated(ss);
+
         return currentSS;
     }
-    /*DSD1a*/
+    /*DSD1a carico un summary sheet già presente nel database*/
     public SummarySheet loadSS(SummarySheet ss) throws UseCaseLogicException,SSException{
         User user = CatERing.getInstance().getUserManager().getCurrentUser();
         if(!user.isChef()) {
             throw new UseCaseLogicException();
         }
-        boolean rightOwner=user.isOwner(user);
+        boolean rightOwner=ss.isOwner(user);
         if(!rightOwner){
+            System.out.println("Non è il proprietario del summary sheet");
             throw new SSException();
         }
         this.setCurrent(ss);
@@ -66,11 +67,10 @@ public class kTaskManager {
             throw new SSException();
         }
         Task t = currentSS.addTask(job);
-
         this.notifyTaskAdded(t);
         return t;
     }
-    /*DSD 2a*/
+    /*DSD 2a rimuovere un lavoro*/
     public void deleteTask(Task task) throws UseCaseLogicException,SSException {
         User user = CatERing.getInstance().getUserManager().getCurrentUser();
         if (!user.isChef()) {
@@ -80,13 +80,12 @@ public class kTaskManager {
             throw new SSException();
         }
         if(!currentSS.contains(task)){
+            System.out.println("il Task non è contenuto nella summary sheet ");
             throw new SSException();
         }
         currentSS.deleteTask(task);
         this.notifyTaskRemoved(task);
     }
-
-
 
     /*DSD 3 ritorna una lista ordinata dei Task*/
     public ArrayList<Task> sortTask(ArrayList<Task> newtl) throws UseCaseLogicException,SSException{
@@ -255,7 +254,7 @@ public class kTaskManager {
         modifyTask(task,tlList,portion,duration,null);
     }
     public void modifyTask(Task task,User cook,Time duration,int portion) throws UseCaseLogicException, SSException {
-        modifyTask(task,null,portion,duration,null);
+        modifyTask(task,null,portion,duration,cook);
     }
 
 

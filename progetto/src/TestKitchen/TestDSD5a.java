@@ -18,7 +18,6 @@ public class TestDSD5a {
         ArrayList<TurnKitchen> tl1 = new ArrayList<TurnKitchen>();
         tl1.add(TurnKitchen.loadKitchenTurnById(1));
         tl1.add(TurnKitchen.loadKitchenTurnById(2));
-        tl1.add(TurnKitchen.loadKitchenTurnById(3));
         System.out.println(CatERing.getInstance().getUserManager().getCurrentUser());
         SummarySheet s = SummarySheet.loadSSId(26);
         kTaskManager taskMgr = CatERing.getInstance().getTaskManager();
@@ -30,7 +29,7 @@ public class TestDSD5a {
         try{
             taskMgr.loadSS(s);
             taskMgr.modifyTask(t1,tl1, User.loadUser("Antonietta"), 5);
-            taskMgr.modifyTask(t2,User.loadUser("Paola"),time3,30);
+            taskMgr.modifyTask(t2,User.loadUser("Lidia"),time3,30);
         } catch (UseCaseLogicException e) {
             e.printStackTrace();
         } catch (SSException e) {

@@ -13,21 +13,18 @@ import java.util.ArrayList;
 public class TestDSD5b {
     public static void main(String [] args){
         CatERing.getInstance().getUserManager().fakeLogin("Lidia");
-        ArrayList<TurnKitchen> tl1 = new ArrayList<TurnKitchen>();
-        tl1.add(TurnKitchen.loadKitchenTurnById(1));
-        tl1.add(TurnKitchen.loadKitchenTurnById(2));
-        tl1.add(TurnKitchen.loadKitchenTurnById(3));
+
         System.out.println(CatERing.getInstance().getUserManager().getCurrentUser());
-        SummarySheet s = SummarySheet.loadSSId(23);
+        SummarySheet s = SummarySheet.loadSSId(26);
         kTaskManager taskMgr = CatERing.getInstance().getTaskManager();
         System.out.println("DISASSIGN TASK");
 
         try {
-            Task t1 = s.getTaskList().get(1);
-            System.out.println("PRIMA DI DISASSING \n"+t1.toString());
             taskMgr.loadSS(s);
+            Task t1 = s.getTaskList().get(1);
+            System.out.println("PRIMA DI DISASSING \n"+t1);
             taskMgr.disassignTask(t1);
-            System.out.println("DOPO DISASSIGN"+t1.toString());
+            System.out.println("DOPO DISASSIGN"+t1);
         } catch (UseCaseLogicException e) {
             e.printStackTrace();
         } catch (SSException e) {

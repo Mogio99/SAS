@@ -19,10 +19,10 @@ public class TestDSD5c {
         System.out.println("TEST DONE TASK");
         try{
             Task t1 = s.getTaskList().get(1);
-            System.out.println("PRIMA DI DONE \n"+t1.toString());
+            System.out.println("PRIMA DI DONE \n"+t1);
             taskMgr.loadSS(s);
             taskMgr.taskDone(t1);
-            System.out.println("DOPO DONE \n"+t1.toString());
+            System.out.println("DOPO DONE \n"+t1);
         } catch (UseCaseLogicException e) {
             e.printStackTrace();
         } catch (SSException e) {

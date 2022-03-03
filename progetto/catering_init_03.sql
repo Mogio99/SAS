@@ -334,9 +334,9 @@ INSERT INTO task VALUE (13,26,208,'Biscotti',0,0,null,0),
 (17,26,214,'Tramezzini tonno e carciofini mignon',0,0,null,0);
 
 /*Riempimento Turn*/
-INSERT INTO turn VALUE (1,'k','2022-02-25 14:00:00','2021-12-25 16:00:00',0),
-(2,'k','2022-02-15 18:00:00','2021-10-15 20:00:00',0),
-(3,'k','2022-03-20 13:00:00','2021-12-25 17:00:00',0);
+INSERT INTO turn VALUE (1,'k','2022-02-25 14:00:00','2022-02-25 16:00:00',0),
+(2,'k','2022-02-15 18:00:00','2022-02-15 21:00:00',0),
+(3,'k','2022-03-20 13:00:00','2022-03-25 17:00:00',0);
 
 /*Riempimento summary sheey*/
 INSERT INTO summarysheet VALUE(26,2,4,'Coffee break pomeriggio');

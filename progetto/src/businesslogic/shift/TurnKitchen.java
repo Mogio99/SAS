@@ -39,7 +39,7 @@ public class TurnKitchen extends Turn {
         return kt;
     }
 
-
+    /*PERSISTANCE*/
     public void saveKitchenTurnSat() {
         String query = "UPDATE turn SET saturation = " + (this.isSaturated() ? 1 : 0) + " WHERE turn_id=" + this.getId() + ";";
 

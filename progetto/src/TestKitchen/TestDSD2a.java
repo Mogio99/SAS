@@ -17,9 +17,9 @@ public class TestDSD2a {
         System.out.println("DELETE TASK TEST");
         System.out.println("<<<task presenti nella summary sheet 26:>>>");
         s.stampTask();
-        taskMgr.deleteTask(s.getTaskList().get(1));
-        taskMgr.deleteTask(s.getTaskList().get(2));
-        taskMgr.deleteTask(s.getTaskList().get(3));
+        taskMgr.deleteTask(s.getTaskList().get(8));
+        taskMgr.deleteTask(s.getTaskList().get(7));
+        taskMgr.deleteTask(s.getTaskList().get(6));
         System.out.println("------------------------------------");
         System.out.println("<<task presenti nella summary sheet 26 dopo i delete:>>");
         s.stampTask();

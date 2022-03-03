@@ -19,15 +19,14 @@ public class SummarySheet {
     private User owner;
     private ServiceInfo serviceUsed;
     private int id;
-    private static SummarySheet instance;
+
 
     public SummarySheet(ServiceInfo s, User user, Menu menu) {
         this.owner = user;
         this.serviceUsed = s;
         ArrayList<Recipe> arrayListRecipe = menu.getAllRecipe();
         taskList = new ArrayList<Task>();
-        int i = 0;
-        for(i=0;i<arrayListRecipe.size();i++){
+        for(int i=0;i<arrayListRecipe.size();i++){
             Task task = new Task(arrayListRecipe.get(i));
             taskList.add(task);
         }
@@ -35,25 +34,22 @@ public class SummarySheet {
     public SummarySheet(int id){
         this.id=id;
     }
+    public boolean isOwner(User u) {
+        return u.equals(owner);
+    }
+
     public Task addTask(Job job) {
         Task turn = new Task(job);
         this.taskList.add(turn);
-        turn.saveNewTaskInSS(turn,this.id);
         return turn;
+    }
+    public void deleteTask(Task task) {
+        this.taskList.remove(task);
 
     }
-
-
     public ArrayList<Task> getTaskList(){return this.taskList;}
 
     public ArrayList<Task> sortTask(ArrayList<Task> newtl) {
-        int i=0;
-        for(i=this.taskList.size()-1;i>=0;i--){
-            deleteTask(this.taskList.get(i));
-        }
-        for(i=0;i< newtl.size();i++){
-            newtl.get(i).saveNewTaskInSS(newtl.get(i),this.id);
-        }
         this.taskList= newtl;
         return taskList;
     }
@@ -64,11 +60,6 @@ public class SummarySheet {
 
     public void assigneTask(Task task, ArrayList<TurnKitchen> tlList, int portion, Time duration, User cook) {
         task.assigneTask(task,tlList,portion,duration,cook);
-    }
-
-    public void deleteTask(Task task) {
-        task.remove();
-        this.taskList.remove(task);
     }
 
     public void modifyTask(Task task, ArrayList<TurnKitchen> tlList, int portion, Time duration, User cook)     throws SSException {
@@ -83,6 +74,7 @@ public class SummarySheet {
         task.done();
     }
     public String getServiceName(){return this.serviceUsed.getName();}
+
     public int getId(){return this.id;}
 
     public void stampTask(){
@@ -122,7 +114,7 @@ public class SummarySheet {
             for(int i=0;i<arrayListRecipe.size();i++) {
                 Task t = new Task(arrayListRecipe.get(i));
                 ss.taskList.add(t);
-                t.saveNewTaskInSS(t,ss.getId());
+                t.saveNewTaskInSS(t);
             }
 
     }

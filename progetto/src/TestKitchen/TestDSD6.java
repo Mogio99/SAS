@@ -20,7 +20,7 @@ public class TestDSD6 {
         System.out.println("TEST SET SATURATION KITCHEN TURN");
         try{
             TurnKitchen t= TurnKitchen.loadKitchenTurnById(2);
-            taskMgr.setSaturation(t,false);
+            taskMgr.setSaturation(t,true);
             System.out.println(t);
         } catch (UseCaseLogicException e) {
             e.printStackTrace();

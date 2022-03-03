@@ -1,4 +1,5 @@
 package businesslogic.task;
+import businesslogic.CatERing;
 import businesslogic.SSException;
 import businesslogic.job.Job;
 import businesslogic.recipe.Recipe;
@@ -28,6 +29,7 @@ public class Task {
         this.idRecipe = rec.getId();
         turnList = new ArrayList<>();
     }
+
     public Task() {
         turnList = new ArrayList<>();
     }
@@ -39,7 +41,6 @@ public class Task {
 
     public void assigneTask(Task task, ArrayList<TurnKitchen> tlList, int portion, Time duration, User cook){
         if(portion!=0) {
-
             this.quantity = portion;
         }
         if(duration!=null){
@@ -52,10 +53,8 @@ public class Task {
         }
         if(tlList!=null){
             this.turnList = tlList;
-
             saveListOnTask(task,tlList);
         }
-        saveTaskModified(task);
     }
 
 
@@ -80,7 +79,7 @@ public class Task {
             }
             saveListOnTask(task,tlList);
         }
-        saveTaskModified(task);
+
     }
 
     public void disassignTask() {
@@ -96,12 +95,7 @@ public class Task {
         }
     }
 
-    public void done() {
-        this.done=true;
-        String query = "UPDATE task SET done=" + true +" WHERE id=" + this.getId() + ";";
-        PersistenceManager.executeUpdate(query);
 
-    }
     public String toString(){
         return "Task_id= "+this.id+"\n"+
                 "Recipe= "+consistingJob.toString()+"\n"+
@@ -110,25 +104,32 @@ public class Task {
                 "Time = "+ this.time +"\n"+
                 "Done ="+ this.done + "\n";
     }
-    public void stampListTurn(){
-            System.out.println(turnList.size());
-
+    public void done(){
+        this.done=true;
     }
     /*PERSISTANCE*/
-    public void saveNewTaskInSS(Task task, int id) {
+    public void saveDone() {
+        String query = "UPDATE task SET done=" + this.done +" WHERE id=" + this.getId() + ";";
+        PersistenceManager.executeUpdate(query);
+
+    }
+    public static void saveNewTaskInSS(Task task) {
         String name_rec = task.consistingJob.toString();
-        String query = "INSERT INTO task (id_recipe,id_summarysheet,name_rec,quantity" +
-                    ",cook_id,time,done) VALUES (?, ?,?,?,?,?,?);";
+        String query = "INSERT INTO task (id_recipe,id_summarysheet,name_rec,quantity,cook_id,time,done) VALUES (?,?,?,?,?,?,?);";
         int[] result = PersistenceManager.executeBatchUpdate(query, 1, new BatchUpdateHandler() {
             @Override
             public void handleBatchItem(PreparedStatement ps, int batchCount) throws SQLException {
                 ps.setInt(1,task.getIdRecipe());
-                ps.setInt(2, id);
+                ps.setInt(2, CatERing.getInstance().getTaskManager().getCurrentSS().getId());
                 ps.setString(3,name_rec);
-                ps.setInt(4,quantity);
-                ps.setInt(5,cook.getId());
-                ps.setTime(6,time);
-                ps.setBoolean(7,done);
+                ps.setInt(4,task.quantity);
+                if (task.cook != null) {
+                    ps.setInt(5,task.cook.getId());
+                }else{
+                    ps.setInt(5,0);
+                }
+                ps.setTime(6,task.time);
+                ps.setBoolean(7,task.done);
             }
 
             @Override
@@ -175,7 +176,10 @@ public class Task {
         String query = "DELETE FROM task WHERE id = "+this.id;
         PersistenceManager.executeUpdate(query);
     }
-
+    public void removeTurn() {
+        String query = "DELETE FROM turn_list WHERE task_id = "+this.id;
+        PersistenceManager.executeUpdate(query);
+    }
 
     private void saveListOnTask(Task task, ArrayList<TurnKitchen> tlList) {
         String paramQuery = "INSERT INTO turn_list (turn_id, task_id) values (?, ?)";
@@ -192,7 +196,7 @@ public class Task {
         });
     }
 
-    private void saveTaskModified(Task task) {
+    public void saveTaskModified(Task task) {
         String time = task.time == null ? null : "'" + task.time + "'";
         String query;
         if(this.cook!=null) {

@@ -8,6 +8,7 @@ import businesslogic.task.Task;
 import businesslogic.task.kTaskManager;
 
 import java.util.ArrayList;
+import java.util.Collections;
 
 public class TestDSD3 {
     public static void main (String [] args) throws UseCaseLogicException, SSException {
@@ -17,17 +18,14 @@ public class TestDSD3 {
         kTaskManager taskMgr = CatERing.getInstance().getTaskManager();
         System.out.println("TEST SORT TASK");
         taskMgr.loadSS(s);
-        ArrayList<Task> newtl= new ArrayList<>();
-        ArrayList<Task> extl = s.getTaskList();
-        newtl.add(extl.get(1));
-        newtl.add(extl.get(0));
-        newtl.add(extl.get(2));
-        newtl.add(extl.get(4));
-        newtl.add(extl.get(6));
-        newtl.add(extl.get(3));
-        newtl.add(extl.get(5));
+        System.out.println("PRIMA DI ESSERE ORDINATA");
+        s.stampTask();
+        ArrayList<Task> newtl=(ArrayList<Task>) s.getTaskList().clone();
+        Collections.shuffle(newtl);
         taskMgr.sortTask(newtl);
-        SummarySheet.loadSSId(26);
+        System.out.println("\n");
+        System.out.println("DOPO  ESSERE ORDINATA");
+        s.stampTask();
         System.out.println("TEMINE TEST DSD3");
     }
 }
