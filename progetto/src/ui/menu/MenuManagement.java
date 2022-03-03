@@ -1,10 +1,8 @@
 package ui.menu;
 
 import businesslogic.CatERing;
-import businesslogic.menu.Menu;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
 import javafx.scene.control.Label;
 import javafx.scene.layout.BorderPane;
 import ui.Main;

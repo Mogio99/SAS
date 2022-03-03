@@ -7,7 +7,6 @@ import businesslogic.shift.ShiftBoard;
 import businesslogic.shift.TurnKitchen;
 import businesslogic.user.User;
 import businesslogic.UseCaseLogicException;
-import businesslogic.menu.Menu;
 import persistence.PersistenceTaskManager;
 
 import java.sql.Time;

@@ -2,17 +2,13 @@ import businesslogic.CatERing;
 import businesslogic.UseCaseLogicException;
 import businesslogic.event.EventInfo;
 import businesslogic.event.ServiceInfo;
-import businesslogic.menu.Menu;
 import businesslogic.menu.Section;
 import businesslogic.recipe.Recipe;
-import javafx.beans.Observable;
 import javafx.collections.ObservableList;
 import persistence.PersistenceManager;
 
 import java.util.Arrays;
 import java.util.Map;
-import java.util.Observer;
-import java.util.Random;
 
 public class TestCatERing {
     public void main(String[] args) {

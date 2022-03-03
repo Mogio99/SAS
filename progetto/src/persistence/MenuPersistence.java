@@ -1,6 +1,5 @@
 package persistence;
 
-import businesslogic.menu.Menu;
 import businesslogic.menu.MenuEventReceiver;
 import businesslogic.menu.MenuItem;
 import businesslogic.menu.Section;

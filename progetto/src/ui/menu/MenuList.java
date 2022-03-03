@@ -2,7 +2,6 @@ package ui.menu;
 
 import businesslogic.CatERing;
 import businesslogic.UseCaseLogicException;
-import businesslogic.menu.Menu;
 import businesslogic.menu.MenuException;
 import businesslogic.user.User;
 import javafx.beans.value.ChangeListener;
